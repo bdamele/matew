@@ -5,8 +5,8 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v1.7 - Released on X Feb 2004 - XXXX lines
-------------------------------------------------
+Matew v1.7 - Released on 13 Feb 2004 - 2101 lines
+-------------------------------------------------
 + Added support for silent mode
   * Added +s flag in 'Parse option flags' section
   * Adapted a lot of matew sections
@@ -16,6 +16,8 @@ Matew v1.7 - Released on X Feb 2004 - XXXX lines
   * Adapted matew
   * Added W_VIEW variable to language files
 + Modified matew-wizard style() and language() functions
+! Fixed process_images_check() if condition
+! Fixed SCRIPT_PATH value in matew, matew-wizard and install
 ! Fixed expr syntax
 ! Fixed .htaccess data processing
 

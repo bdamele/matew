@@ -30,10 +30,9 @@
 AUTHOR_NAME="Bernardo 'inquis' Damele"
 AUTHOR_EMAIL="bernardo@inquis.it"
 SCRIPT_NAME="Matew"
-SCRIPT_PID="`ps a | grep matew | awk '{print $1}' | head -1`"
-SCRIPT_PATH="`ls -l /proc/$SCRIPT_PID/fd 2>/dev/null | grep matew | awk '{print $11}' | sed -n 's/\([^/]*.*[/$]\).*/\1/p'`"
+SCRIPT_PATH="`pwd`"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.7-rc2"
+SCRIPT_VERSION="1.7"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -323,9 +322,11 @@ process_data_dirs() {
       echo "AddDefaultCharset $CHARSET" > $DIR/data/.htaccess
     else
       if [ ! -f "$DIR/data/.htaccess" ]; then
-        echo -e "         \\033[0;34m>\\033[0m Backupping \\033[0;36m$DIR/data\\033[0m to \\033[0;36m$DIR/BACKUP\\033[0m"
+        if [ $VERBOSE -ge 0 ]; then
+          echo -e "         \\033[0;34m>\\033[0m Backupping \\033[0;36m$DIR/data\\033[0m to \\033[0;36m$DIR/BACKUP\\033[0m"
+          echo -e "         \\033[0;34m>\\033[0m Creating subdirectory \\033[0;36m$DIR/data\\033[0m"
+        fi
         mv -f $DIR/data $DIR/BACKUP/data
-        echo -e "         \\033[0;34m>\\033[0m Creating subdirectory \\033[0;36m$DIR/data\\033[0m"
         mkdir $DIR/data
         echo "AddDefaultCharset $CHARSET" > $DIR/data/.htaccess
       else
@@ -433,6 +434,9 @@ process_images_check() {
     fi
     if [ -z "$ANS" ] || [ "$ANS" = "Yes" ] || [ "$ANS" = "yes" ] || [ "$ANS" = "All" ] || [ "$ANS" = "all" ]; then
       create_image
+    elif [ "$ANS" != "No" ] && [ "$ANS" != "no" ] && [ "$ANS" != "None" ] && [ "$ANS" != "none" ]; then
+      echo -e "           Sorry, invalid answer.\n"
+      process_images_check
     fi
   elif [ "$ANS" = "None" ] || [ "$ANS" = "none" ]; then
     if [ $VERBOSE -ge 1 ]; then
