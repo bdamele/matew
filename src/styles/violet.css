@@ -1,0 +1,99 @@
+body {
+  background-color: #FFCCFF;
+  color: #000000;
+  font-size: 12pt;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a:link {
+  color: #FF6699;
+  text-decoration: underline;
+}
+
+a:active,a:hover {
+  color: #FF6699;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #FF6699;
+  text-decoration: underline;
+}
+
+img {
+  border-color: #FF6699;
+  color: #FF6699;
+}
+
+tt {
+  font-size: 12pt;
+}
+
+.description {
+  color: #000000;
+  font-size: 13pt;
+  text-align: justify;
+}
+
+.separator {
+  color: #FFCCFF;
+}
+
+.table_misc {
+  background-color: #660033;
+  color: #FFFFFF;
+  font-size: 12pt;
+}
+
+.table_subtitle {
+  background-color: #990066;
+  color: #FFFFFF;
+  font-size: 13pt;
+}
+
+.table_subtitle2 {
+  background-color: #990066;
+  color: #FFFFFF;
+  font-size: 12pt;
+}
+
+.table_paths {
+  color: #FF6699;
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+.table_text {
+  background-color: #660033;
+  color: #FFFFFF;
+  font-size: 13pt;
+}
+
+.table_text_out {
+  background-color: #990066;
+  color: #FFFFFF;
+  font-size: 13pt;
+}
+
+.table_title {
+  color: #FFFFFF;
+  font-size: 20pt;
+  font-weight: bold;
+}
+
+.table_up {
+  background-color: #660033;
+  font-size: 12pt;
+}
+
+.text_justify {
+  background-color: #990066;
+  color: #FFFFFF;
+  font-size: 13pt;
+  text-align: justify;
+}
+
+.text {
+  color: #000000;
+  font-size: 12pt;
+}

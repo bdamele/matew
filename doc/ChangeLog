@@ -5,6 +5,12 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
+Matew v1.8 - Released on XX Feb 2004 - XXXX lines
+-------------------------------------------------
++ Added new styles: brasil, green, orange, violet
++ Revised matew-wizard
++ Fixed an if condition in process_information_files()
+
 Matew v1.7 - Released on 13 Feb 2004 - 2101 lines
 -------------------------------------------------
 + Added support for silent mode

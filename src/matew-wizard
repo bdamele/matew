@@ -45,7 +45,7 @@ help() {
   cat << HELP
 Usage: `basename $0` [option]
 
-$SCRIPT_NAME is a wizard to help you start setting matew. Run this
+$SCRIPT_NAME is a wizard to help you set up matew. Run this
 script with no option and read the instructions.
 
 option:
@@ -56,7 +56,7 @@ HELP
 }
 
 desc() {
-  echo -e "\n$SCRIPT_NAME is a wizard to help you start setting matew. What it will do is\n\
+  echo -e "\n$SCRIPT_NAME is a wizard to help you set up matew. What it will do is\n\
 create a single configuration file needed by matew."
 }
 
@@ -67,7 +67,7 @@ start() {
     echo -e "Sorry, that response was not an option."
     start
   elif [ "`echo $ITEM | cut -c 1`" != "y" -a "`echo $ITEM | cut -c 1`" != "n" ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     start
   elif [ "`echo $ITEM | cut -c 1`" = "n" ]; then
     cleanup 0
@@ -83,10 +83,10 @@ documents to user agents as a stream of bytes; user agents interpret them as\n\
 a sequence of characters. A complete list of valid characters encoding can\n\
 be listed on http://www.w3.org/International/O-charset-list.html.\n\
 Some of them are ISO-8859-1, ISO-8859-15 and UTF-8.\n\
-\nWhich charset do you choose? [default: UTF-8] \c"
+\nWhich charset do you choose? [default: $CHARSET] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
-    echo "CHARSET=\"UTF-8\"" >> $TEMP/.matew-wizard-$USER
+    echo "CHARSET=\"$CHARSET\"" >> $TEMP/.matew-wizard-$USER
   else
     echo "CHARSET=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   fi
@@ -97,17 +97,17 @@ style() {
     echo -e "\n\033[1mAlbum pages CSS style\033[0m (STYLE)\n\
 The style parameter identifies a CSS style, which is the apparance that you\n\
 want to apply to your album.\n\
-Till now the default CSS styles are:\n
+Currently, the available CSS styles are:\n
 `ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g'`"
   fi
-  echo -e "\nWhich CSS style do you choose? [default: bluenavy] \c"
+  echo -e "\nWhich CSS style do you choose? [default: $STYLE] \c"
   read ITEM
-  if [ -z "$ITEM" -o "$ITEM" = "bluenavy" ]; then
-    echo "STYLE=\"bluenavy\"" >> $TEMP/.matew-wizard-$USER
+  if [ -z "$ITEM" ]; then
+    echo "STYLE=\"$STYLE\"" >> $TEMP/.matew-wizard-$USER
   elif [ ! -z "`ls -1 $STYLES_DIR | grep "^$ITEM.css"`" ]; then
     echo "STYLE=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     style
   fi
@@ -119,17 +119,17 @@ language() {
     echo -e "\n\033[1mAlbum pages texts language\033[0m (LANG)\n\
 The language parameter is a two-letters word that identifies the language\n\
 you want the text in album pages to be.\n\
-Till now the supported languages are brazilian portuguese (br), english\n\
+Currently, the supported languages are brazilian portuguese (br), english\n\
 (en), croatian (hr) and italian (it)."
   fi
-  echo -e "\nWhat language do you choose? [default: en] \c"
+  echo -e "\nWhat language do you choose? [default: $LANG] \c"
   read ITEM
-  if [ -z "$ITEM" -o "$ITEM" = "en" ]; then
-    echo "LANG=\"en\"" >> $TEMP/.matew-wizard-$USER
+  if [ -z "$ITEM" ]; then
+    echo "LANG=\"$LANG\"" >> $TEMP/.matew-wizard-$USER
   elif [ ! -z "`ls -1 $LANGS_DIR | grep "^$ITEM$"`" ]; then
     echo "LANG=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     language
   fi
@@ -137,13 +137,25 @@ Till now the supported languages are brazilian portuguese (br), english\n\
 }
 
 extlink_lnk() {
-  echo -e "\nWhich is the link? \c"
-  read LNK
+  if [ -z "$LINK" ]; then
+     echo -e "\nWhat is the link? \c"
+     read LNK
+  else
+     echo -e "\nWhat is the link? [default: $LINK] \c"
+     read LNK
+     if [ -z "$LNK" ]; then
+        LNK="$LINK"
+     fi
+  fi
 }
 
 extlink_tag() {
-  echo -e "\nWhich is the link tag? [default: Home] \c"
-  read TAG
+  if [ -z "$LINK_TAG" ]; then
+     echo -e "\nWhat is the link tag? [default: Home] \c"
+  else
+     echo -e "\nWhat is the link tag? [default: $LINK_TAG] \c"
+  fi
+  read LINK_TAG
 }
 
 extlink() {
@@ -151,28 +163,28 @@ extlink() {
     echo -e "\n\033[1mAlbum pages external HTML link\033[0m (LINK)\n\
 The link parameter is a valid HTML link to an HTML page that has nothing to\n\
 do with the album.\n\
-This can be useful in case of you want to visualize at the beginning of all\n\
+This can be useful in case of you want to display at the beginning of all\n\
 album pages a link to your home page."
   fi
-  echo -e "\nDo you want to add an external HTML link? [default: no] \c"
+  if [ -z "$LINK" ]; then
+     echo -e "\nDo you want to add an external HTML link? [default: no] \c"
+  else
+     echo -e "\nDo you want to add an external HTML link? [default: yes] \c"
+  fi
   read ITEM
-  if [ "$ITEM" = "yes" ]; then
+  if [ "$ITEM" = "yes" ] || [ -z "$ITEM" -a ! -z "$LINK" ]; then
     extlink_lnk
     if [ -z "$LNK" ]; then
-      echo -e "Sorry, invalid answer."
+      echo "Sorry, invalid answer."
       extlink_lnk
     fi
     echo "LINK=\"$LNK\"" >> $TEMP/.matew-wizard-$USER
     extlink_tag
-    if [ -z "$TAG" ]; then
-      echo "LINK_TAG=\"Home\"" >> $TEMP/.matew-wizard-$USER
-    else
-      echo "LINK_TAG=\"$TAG\"" >> $TEMP/.matew-wizard-$USER
-    fi
+    echo "LINK_TAG=\"$LINK_TAG\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "$ITEM" -o "$ITEM" = "no" ]; then
     echo "LINK=\"\"" >> $TEMP/.matew-wizard-$USER
   elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     extlink
   fi
@@ -186,12 +198,12 @@ This parameter is a valid number that identifies the amount of thumbnails\n\
 you want to be visualized per line.\n\
 Note: This value must be a number within 1 and 5."
   fi
-  echo -e "\nHow many thumbnails per line do do you choose? [default: 4] \c"
+  echo -e "\nHow many thumbnails per line do do you choose? [default: $THUMBS_PL] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
-    echo "THUMBS_PL=\"4\"" >> $TEMP/.matew-wizard-$USER
+    echo "THUMBS_PL=\"$THUMBS_PL\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 5 ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     thumbnails_pl
   else
@@ -207,12 +219,12 @@ This parameter is a valid number that identifies the amount of thumbnails\n\
 you want to be visualized per column.\n\
 Note: This value must be a number within 1 and 20."
   fi
-  echo -e "\nHow many thumbnails per column do do you choose? [default: 5] \c"
+  echo -e "\nHow many thumbnails per column do do you choose? [default: $THUMBS_PC] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
-    echo "THUMBS_PC=\"5\"" >> $TEMP/.matew-wizard-$USER
+    echo "THUMBS_PC=\"$THUMBS_PC\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     thumbnails_pc
   else
@@ -225,18 +237,20 @@ validator() {
   if [ -z "$QUERY" ]; then
     echo -e "\n\033[1mAlbum HTML and CSS validator boxes\033[0m (VALIDATOR)\n\
 The validator parameter is a boolean variable that identifies the will to\n\
-visualize, or not, both the HTML and CSS validator boxes at the bottom of\n\
+display, or not, both the HTML and CSS validator boxes at the bottom of\n\
 each album page."
   fi
-  echo -e "\nDo you want the album pages to visualize the HTML and CSS validator\n\
-boxes? [default: yes] \c"
+  echo -e "\nDo you want the album pages to display the HTML and CSS validator\n\
+boxes? [default: $VALIDATOR] \c"
   read ITEM
-  if [ -z "$ITEM" -o "$ITEM" = "yes" ]; then
+  if [ -z "$ITEM" ]; then
+    echo "VALIDATOR=\"$VALIDATOR\"" >> $TEMP/.matew-wizard-$USER
+  elif [ "$ITEM" = "yes" ]; then
     echo "VALIDATOR=\"yes\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" = "no" ]; then
     echo "VALIDATOR=\"no\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     validator
   fi
@@ -249,14 +263,16 @@ ratio() {
 The ratio parameter is a boolean variable that identifies the will to\n\
 maintain the original image size when creating its thumbnail."
   fi
-  echo -e "\nDo you want to maintain the size ratio for thumbnails? [default: yes] \c"
+  echo -e "\nDo you want to maintain the size ratio for thumbnails? [default: $RATIO] \c"
   read ITEM
-  if [ -z "$ITEM" -o "$ITEM" = "yes" ]; then
+  if [ -z "$ITEM" ]; then
+    echo "RATIO=\"$RATIO\"" >> $TEMP/.matew-wizard-$USER
+  elif [ "$ITEM" = "yes" ]; then
     echo "RATIO=\"yes\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" = "no" ]; then
     echo "RATIO=\"no\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     ratio
   fi
@@ -273,12 +289,12 @@ Possible values are:\n
 2 - Thumbnails, Small\n\
 3 - Thumbnails, Small, Medium"
   fi
-  echo -e "\nHow many scaled images do you want to be created? [default: 3] \c"
+  echo -e "\nHow many scaled images do you want to be created? [default: $SCALED] \c"
   read ITEM
-  if [ -z "$ITEM" -o "$ITEM" = "3" ]; then
-    echo "SCALED=\"3\"" >> $TEMP/.matew-wizard-$USER
+  if [ -z "$ITEM" ]; then
+    echo "SCALED=\"$SCALED\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 3 ]; then
-    echo -e "Sorry, invalid answer."
+    echo "Sorry, invalid answer."
     QUERY="open"
     scaled
   else
@@ -295,6 +311,22 @@ main() {
   else
     LANGS_DIR="/etc/matew/languages"
     STYLES_DIR="/etc/matew/styles"
+  fi
+
+  # Set the defaults for all variables
+  CHARSET="UTF-8"
+  STYLE="bluenavy"
+  LANG="en"
+  LINK=""
+  THUMBS_PL="4"
+  THUMBS_PC="5"
+  VALIDATOR="yes"
+  RATIO="yes"
+  SCALED="3"
+
+  # Override those values if the user had set them before.
+  if [ -f $CONFIG_FILE ]; then
+    . $CONFIG_FILE
   fi
 
   cat << HEADER > $TEMP/.matew-wizard-$USER

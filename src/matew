@@ -32,7 +32,7 @@ AUTHOR_EMAIL="bernardo@inquis.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="`pwd`"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.7"
+SCRIPT_VERSION="1.8-rc1"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -373,7 +373,7 @@ process_information_files() {
 
     for IMAGE in `cat $TEMP/matew-$USER/DIRS/$DNAME`; do
       IMAGE="`echo $IMAGE | sed -n 's/.*\/\([^/]*.*\).*/\1/p'`"
-      if [ -z "`cat $DIR/image_descriptions 2>/dev/null | grep '^$IMAGE'`" ]; then
+      if [ -z "`cat $DIR/image_descriptions 2>/dev/null | grep "^$IMAGE"`" ]; then
         echo "$IMAGE \"\"" >> $DIR/image_descriptions
       fi
     done
