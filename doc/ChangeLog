@@ -5,7 +5,7 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v2.0 - Released on XX May 2004 - XXXX lines
+Matew v2.0 - Released on XX Sep 2004 - XXXX lines
 -------------------------------------------------
 ! Fixed matew-cleanup syntax
 ! Fixed the first if condition in matew-wizard main() function

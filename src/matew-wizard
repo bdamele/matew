@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Name: Matew-wizard - Make Album The Easy Way Wizard
-# Author: Bernardo 'inquis' Damele <bernardo@linux.it>
+# Author: Bernardo 'inquis' Damele <inquis (at) ondaquadra <dot> org>
 #
 # Matew-wizard is a wizard to help you start running matew. Run this
 # script and read the instructions carefully.
@@ -395,7 +395,7 @@ You can now run matew."
 }
 
 # Trap INT, KILL, ALRM and TERM signals
-trap 'cleanup 1' 2 9 14 15
+trap 'cleanup 130' 2 9 14 15
 
 # Parse option flags
 if [ ! -z "$1" ]; then

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Name: Matew - Make Album The Easy Way
-# Author: Bernardo 'inquis' Damele <bernardo@linux.it>
+# Author: Bernardo 'inquis' Damele <inquis (at) ondaquadra <dot> org>
 #
 # Matew is a valid HTML/CSS generator for static image albums. It supports
 # retrieving information from EXIF cameras and includes customizable options
@@ -28,11 +28,11 @@
 
 # Script details (Do NOT edit)
 AUTHOR_NAME="Bernardo 'inquis' Damele"
-AUTHOR_EMAIL="bernardo@linux.it"
+AUTHOR_EMAIL="inquis@ondaquadra.org"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="$(pwd)"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="2.0-rc2"
+SCRIPT_VERSION="2.0-rc3"
 
 # Configuration parameters (Do NOT edit)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -41,7 +41,7 @@ TEMP="/tmp"
 
 # Matew functions
 version() {
-  echo -e "$SCRIPT_NAME, version $SCRIPT_VERSION, May 2004, $AUTHOR_NAME"
+  echo -e "$SCRIPT_NAME, version $SCRIPT_VERSION, Sep 2004, $AUTHOR_NAME"
 }
 
 report() {
@@ -1012,11 +1012,14 @@ html_image() {
 
     if [ ! -z "$DESC" ]; then
       echo "    <tr>" >> $1.html
-      echo "     <td colspan=\"3\" width=\"350\">" >> $1.html
-      echo "      <table border=\"0\" cellpadding=\"2\" cellspacing=\"0\">" >> $1.html
+      echo "     <td colspan=\"1\" width=\"350\">" >> $1.html
+      echo "      <table border=\"0\" cellpadding=\"5\" cellspacing=\"2\" width=\"100%\">" >> $1.html
       echo "       <tr>" >> $1.html
-      echo "        <td class=\"description\">" >> $1.html
-      echo "         <b>$W_ID</b>: $DESC" >> $1.html
+      echo "        <td align=\"left\" class=\"table_text\" width=\"175\">" >> $1.html
+      echo "         $W_ID" >> $1.html
+      echo "        </td>" >> $1.html
+      echo "        <td align=\"justify\" class=\"table_text_out\">" >> $1.html
+      echo "         $DESC" >> $1.html
       echo "        </td>" >> $1.html
       echo "       </tr>" >> $1.html
       echo "      </table>" >> $1.html
