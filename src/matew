@@ -26,7 +26,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GOPYING file for more details.
 
-# Script details (Do NOT edit this details)
+# Script details (Do NOT edit these details)
 AUTHOR_NAME="Bernardo 'inquis' Damele"
 AUTHOR_EMAIL="bernardo@inquis.it"
 SCRIPT_NAME="Matew"
@@ -35,8 +35,8 @@ SCRIPT_PATH="`ls -l /proc/$SCRIPT_PID/fd 2>/dev/null | grep matew | awk '{print 
 SCRIPT_URL="http://matew.sourceforge.net"
 SCRIPT_VERSION="1.6-rc1"
 
-# Configuration parameters (Do NOT edit this parameters)
-CONFIG_FILE="$HOME/.matew/conf"
+# Configuration parameters (Do NOT edit these parameters)
+CONFIG_FILE="$HOME/.matew/matewrc"
 RCONF="/etc"
 TEMP="/tmp"
 
@@ -168,10 +168,11 @@ checks() {
 
     if [ "`echo "$DPATH" | cut -c 1`" != "/" ] && [ "`echo "$DPATH" | cut -c 1`" != "~" ] && [ "`echo "$DPATH" | cut -c 1-2`" != "./" ]; then
       DPATH="./$DPATH"
-      if [ "$TPATH" != "$DPATH" ]; then
-        if [ "`echo "$TPATH" | cut -c 1`" != "/" ] && [ "`echo "$TPATH" | cut -c 1`" != "~" ] && [ "`echo "$TPATH" | cut -c 1-2`" != "./" ]; then
-          TPATH="./$TPATH"
-        fi
+    fi
+
+    if [ "$DPATH" != "$TPATH" ]; then
+      if [ "`echo "$TPATH" | cut -c 1`" != "/" ] && [ "`echo "$TPATH" | cut -c 1`" != "~" ] && [ "`echo "$TPATH" | cut -c 1-2`" != "./" ]; then
+        TPATH="./$TPATH"
       fi
     fi
 
@@ -325,7 +326,7 @@ process_information_files() {
   for DIR in `cat $TEMP/matew-$USER/dirs`; do
     BSDIR="`echo $DIR | sed s/\"\/\"/\"\\\/\"/g`"
     if  [ ! -f $DIR/album_description ] || [ -z "`cat $DIR/album_description 2>/dev/null | grep 'Album image identifier' | sed s/'"'/''/g | awk '{print $4}'`" ]; then
-      if [ $VERBOSE -ge 2 ]; then
+      if [ $VERBOSE -ge 2 ] || [ "$STOP" = "yes" ]; then
         echo -e "         \\033[0;34m>\\033[0m Creating \\033[0;36m$DIR/album_description\\033[0m"
       fi
       echo "Album name \"\"" > $DIR/album_description
@@ -340,7 +341,7 @@ process_information_files() {
     DIR="`echo ${DIR%/}`"
     DNAME="`echo $DIR | sed -n 's/.*\/\([^/]*.*\).*/\1/p'`"
 
-    if [ $VERBOSE -ge 2 ]; then
+    if [ $VERBOSE -ge 2 ] || [ "$STOP" = "yes" ]; then
       if [ ! -f $DIR/image_descriptions ]; then
         echo -e "         \\033[0;34m>\\033[0m Creating \\033[0;36m$DIR/image_descriptions\\033[0m"
       elif [ "`cat $TEMP/matew-$USER/DIRS/$DNAME | wc -l | sed s/^\ *//`" != "`cat $DIR/image_descriptions 2>/dev/null | wc -l | sed s/^\ *//`" ]; then
@@ -535,9 +536,6 @@ html_path1() {
       C="`expr $C - 3`"
     done
   fi
-
-  echo "        </td>" >> $1.html
-  echo "       </tr>" >> $1.html
 }
 
 html_path2() {
@@ -546,8 +544,6 @@ html_path2() {
       echo "         <font class=\"separator\">::</font> $W_INDEX" >> $1.html
     else
       echo "         $W_INDEX" >> $1.html
-      echo "        </td>" >> $1.html
-      echo "       </tr>" >> $1.html
     fi
   fi
 }
@@ -612,35 +608,25 @@ html_image_path() {
 }
 
 html_middle1() {
+  if [ ! -z "$LINK" ]; then
+    echo "       <tr>" >> $1.html
+    echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
+    echo "         <a href=\"$LINK\">Homepage</a>" >> $1.html
+  elif [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
+    echo "       <tr>" >> $1.html
+    echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
+  fi
+
   if [ "$DIR" != "$DPATH" ]; then
     process_endpoint
-
-    if [ ! -z "$LINK" ]; then
-      echo "       <tr>" >> $1.html
-      echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
-      echo "         <a href=\"$LINK\">Homepage</a>" >> $1.html
-      html_path1 "$1"
-    elif [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
-      echo "       <tr>" >> $1.html
-      echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
-      html_path1 "$1"
-    fi
+    html_path1 "$1"
   else
-    if [ ! -z "$LINK" ]; then
-      echo "       <tr>" >> $1.html
-      echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
-      echo "         <a href=\"$LINK\">Homepage</a>" >> $1.html
-      html_path2 "$1"
-    elif [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
-      echo "       <tr>" >> $1.html
-      echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
-      html_path2 "$1"
-    fi
+    html_path2 "$1"
+  fi
 
-    if [ ! -z "$LINK" ] || [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
-      echo "        </td>" >> $1.html
-      echo "       </tr>" >> $1.html
-    fi
+  if [ ! -z "$LINK" ] || [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
+    echo "        </td>" >> $1.html
+    echo "       </tr>" >> $1.html
   fi
 
   echo "      </table>" >> $1.html
@@ -1591,7 +1577,7 @@ html_thumbindex() {
     echo "         </table>" >> $DIR/index$SUFFIX.html
     echo "        </td>" >> $DIR/index$SUFFIX.html
 
-    if [ $NUMLINE -eq 4 ] && [ $NIMAGE -ne $THUMBS ] && [ "$IMAGE" != "`cat $TEMP/matew-$USER/data_images | tail -1`" ]; then
+    if [ $NUMLINE -eq $THUMBS_PC ] && [ $NIMAGE -ne $THUMBS ] && [ "$IMAGE" != "`cat $TEMP/matew-$USER/data_images | tail -1`" ]; then
       echo "       </tr>" >> $DIR/index$SUFFIX.html
       echo "       <tr>" >> $DIR/index$SUFFIX.html
       NUMLINE="1"
@@ -1791,6 +1777,8 @@ process_sl() {
 }
 
 process_html() {
+  THUMBS="`expr $THUMBS_PC \* $THUMBS_PL`"
+
   DIR=""
   for DIR in `cat $TEMP/matew-$USER/data_dirs.uniq`; do
     ls -1BF $DIR | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/'BACKUP-data\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
@@ -1867,8 +1855,13 @@ process_html() {
   fi
 }
 
+process_html_stats() {
+  echo -e "         \\033[0;34m>\\033[0m Album indexes created: \\033[0;36m`cat $TEMP/matew-$USER/dirs | wc -l | sed s/^\ *//`\\033[0m"
+  echo -e "         \\033[0;34m>\\033[0m Images processed: \\033[0;36m`cat $TEMP/matew-$USER/images | wc -l | sed s/^\ *//`\\033[0m"
+}
+
 main() {
-export IFS=$'\n'
+  export IFS=$'\n'
 
   DPATH="`echo ${DPATH%/}`"
   TPATH="`echo ${TPATH%/}`"
@@ -1908,9 +1901,8 @@ export IFS=$'\n'
   echo -e "\\033[0;36m`date +%H:%M`\\033[0m \\033[0;34m>>\\033[0m Creating HTML album files, this step could take a moment"
   process_html
 
-  echo -e "\\033[0;36m`date +%H:%M`\\033[0m \\033[0;34m>>\\033[0m Album statistics:"
-  echo -e "         \\033[0;34m>\\033[0m Album indexes created: \\033[0;36m`cat $TEMP/matew-$USER/dirs | wc -l | sed s/^\ *//`\\033[0m"
-  echo -e "         \\033[0;34m>\\033[0m Images processed: \\033[0;36m`cat $TEMP/matew-$USER/images | wc -l | sed s/^\ *//`\\033[0m"
+  echo -e "\\033[0;36m`date +%H:%M`\\033[0m \\033[0;34m>>\\033[0m Album statistics"
+  process_html_stats
 
   echo -e "\\033[0;36m`date +%H:%M`\\033[0m \\033[0;34m>>\\033[0m Album created successfully, check \\033[0;36m$DPATH/index.html\\033[0m"
   cleanup 0
@@ -1920,46 +1912,44 @@ export IFS=$'\n'
 trap 'cleanup 1 2' 2 9 14 15
 
 # Parse option flags
-while [ 0 ]; do
-  if [ "$1" = "-v" ]; then
-    if [ -z "$2" ] || [ -z "$3" ]; then
-      help
-      cleanup 1
-    else
-      VERBOSE="2"
-      DPATH="$2"
-      TPATH="$3"
-      STOP="no"
-      main
-    fi
-  elif [ "$1" = "-i" ]; then
-    if [ -z "$2" ] || [ -z "$3" ]; then
-      help
-      cleanup 1
-    else
-      VERBOSE="1"
-      DPATH="$2"
-      TPATH="$3"
-      STOP="yes"
-      main
-    fi
-  elif [ "$1" = "-h" ] || [ -z "$1" ]; then
-    help
-    cleanup 0
-  elif [ "$1" = "-V" ]; then
-    version
-    cleanup 0
-  elif [ "`echo $1 | cut -c 1`" = "-" ]; then
+if [ "$1" = "-v" ]; then
+  if [ -z "$2" ] || [ -z "$3" ]; then
     help
     cleanup 1
-  elif [ -z "$1" ] || [ -z "$2" ]; then
+  else
+    VERBOSE="2"
+    DPATH="$2"
+    TPATH="$3"
+    STOP="no"
+    main
+  fi
+elif [ "$1" = "-i" ]; then
+  if [ -z "$2" ] || [ -z "$3" ]; then
     help
     cleanup 1
   else
     VERBOSE="1"
-    DPATH="$1"
-    TPATH="$2"
-    STOP="no"
+    DPATH="$2"
+    TPATH="$3"
+    STOP="yes"
     main
   fi
-done
+elif [ "$1" = "-h" ] || [ -z "$1" ]; then
+  help
+  cleanup 0
+elif [ "$1" = "-V" ]; then
+  version
+  cleanup 0
+elif [ "`echo $1 | cut -c 1`" = "-" ]; then
+  help
+  cleanup 1
+elif [ -z "$1" ] || [ -z "$2" ]; then
+  help
+  cleanup 1
+else
+  VERBOSE="1"
+  DPATH="$1"
+  TPATH="$2"
+  STOP="no"
+  main
+fi

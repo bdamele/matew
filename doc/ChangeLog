@@ -7,23 +7,28 @@ ChangeLog
 
 Matew v1.6 - Released on X Feb 2004 - XXXX lines
 ------------------------------------------------
-+ Updated file names
++ Updated file name
   * matew-$SCRIPT_VERSION -> matew
-  * Adapted install and uninstall scripts
+  * $CONF/conf -> $CONF/matewrc
+  * Adapted install, uninstall, matew and matew_wizard scripts
 + Added support for a standard link to an external HTML page
-  * Added extlink() to matew-wizard
+  * Added extlink() and extlink_ans() to matew-wizard
   * Revised html_middle1(), html_path1(), html_path2() and
     html_image_path()
-+ Added customizable 'thumbnails per page' number
-  * Added thumbnails() to matew-wizard
-  * Moved 20-checks to $THUMBS-checks
++ Added customizable thumbnails per page number
+  * Added thumbnails_pc() to matew-wizard
+  * Added thumbnails_pl() to matew-wizard
+  * Adapted matew script
 + Added support for accepting customized styles
   * Added process_sl() to matew
   * Moved STYLES_DIR and LANGS_DIR checks from process_html() to
     process_sl()
 + Added an if check to ENDPOINT in html_image_path()
+! Moved album statistics lines from main() to process_html_stats()
 ! Fixed the html_close 'Matew-created' line
 ! Fixed an important check to DPATH and TPATH syntax
+! Fixed an if condition into process_information_files()
+- Removed while cycle in 'Parse option flags' section
 
 Matew v1.5 - Released on 5 Feb 2004 - 1893 lines
 ------------------------------------------------

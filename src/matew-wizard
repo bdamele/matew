@@ -135,6 +135,11 @@ Till now the supported languages are brazilian portuguese (br), english\n\
   QUERY=""
 }
 
+extlink_ans() {
+  echo -e "\nWhich is the link? \c"
+  read ANS
+}
+
 extlink() {
   if [ -z "$QUERY" ]; then
     echo -e "\n\033[1mAlbum pages external HTML link\033[0m (LINK)\n\
@@ -146,8 +151,11 @@ album pages a link to your home page."
   echo -e "\nDo you want to add an external HTML link? [default: no] \c"
   read ITEM
   if [ "$ITEM" = "yes" ]; then
-    echo -e "Which is the link? \c"
-    read ANS
+    extlink_ans
+    if [ -z "$ANS" ]; then
+      echo -e "Sorry, invalid answer."
+      extlink_ans
+    fi
     echo "LINK=\"$ANS\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "$ITEM" -o "$ITEM" = "no" ]; then
     echo "LINK=\"\"" >> $TEMP/.matew-wizard-$USER
@@ -159,27 +167,44 @@ album pages a link to your home page."
   QUERY=""
 }
 
-thumbnails() {
+thumbnails_pc() {
   if [ -z "$QUERY" ]; then
-    echo -e "\n\033[1mNumber of thumbnails per page\033[0m (THUMBS)\n\
-The thumbnails parameter is a valid number that identifies the amount of\n\
-thumbnails you want to see per page.\n\
-Note: The number should be preferibly a doubled of four."
+    echo -e "\n\033[1mNumber of thumbnails per column\033[0m (THUMBS_PC)\n\
+This parameter is a valid number that identifies the amount of thumbnails\n\
+you want to be visualized per column.\n\
+Note: This value must be a number within 2 and 4."
   fi
-  echo -e "\nHow many thumbnails per page do do you choose? [default: 20] \c"
+  echo -e "\nHow many thumbnails per colum do do you choose? [default: 4] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
-    echo "THUMBS=\"20\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ]; then
+    echo "THUMBS_PC=\"4\"" >> $TEMP/.matew-wizard-$USER
+  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 2 ] || [ $ITEM -gt 4 ]; then
     echo -e "Sorry, invalid answer."
     QUERY="open"
-    thumbnails
-  elif [ $ITEM -le 0 ]; then
-    echo -e "You have to visualize at least one image per page."
-    QUERY="open"
-    thumbnails
+    thumbnails_pc
   else
-    echo "THUMBS=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
+    echo "THUMBS_PC=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
+  fi
+  QUERY=""
+}
+
+thumbnails_pl() {
+  if [ -z "$QUERY" ]; then
+    echo -e "\n\033[1mNumber of thumbnails per line\033[0m (THUMBS_PL)\n\
+This parameter is a valid number that identifies the amount of thumbnails\n\
+you want to be visualized per line.\n\
+Note: This value must be a number within 1 and 20."
+  fi
+  echo -e "\nHow many thumbnails per line do do you choose? [default: 5] \c"
+  read ITEM
+  if [ -z "$ITEM" ]; then
+    echo "THUMBS_PL=\"5\"" >> $TEMP/.matew-wizard-$USER
+  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
+    echo -e "Sorry, invalid answer."
+    QUERY="open"
+    thumbnails_pl
+  else
+    echo "THUMBS_PL=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   fi
   QUERY=""
 }
@@ -241,19 +266,20 @@ HEADER
   style
   language
   extlink
-  thumbnails
+  thumbnails_pc
+  thumbnails_pl
   validator
   ratio
 
   if [ ! -d "$HOME/.matew" ]; then
     mkdir $HOME/.matew
   else
-    rm -rf $HOME/.matew/conf
+    rm -rf $HOME/.matew/matewrc
   fi
 
-  cp -f $TEMP/.matew-wizard-$USER $CONF/conf
+  cp -f $TEMP/.matew-wizard-$USER $CONF/matewrc
 
-  echo -e "\n\033[1mAll done!\033[0m\nThe configuration file has been saved to $CONF/conf.\n\
+  echo -e "\n\033[1mAll done!\033[0m\nThe configuration file has been saved to $CONF/matewrc.\n\
 You can now run matew."
 
   cleanup 0
