@@ -7,6 +7,9 @@ ChangeLog
 
 Matew v1.8 - Released on XX Feb 2004 - XXXX lines
 -------------------------------------------------
++ Added support for alternate stylesheet
+  * Added altstyles() to matew-wizard
+  * Adapted html_open() and process_sl()
 + Added new styles: brasil, green, orange, violet
 + Revised matew-wizard
 + Fixed an if condition in process_information_files()

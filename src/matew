@@ -32,7 +32,7 @@ AUTHOR_EMAIL="bernardo@inquis.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="`pwd`"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.8-rc1"
+SCRIPT_VERSION="1.8-rc2"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -189,11 +189,11 @@ checks() {
       echo -e "\\033[0;36m`date +%H:%M`\\033[0m \\033[0;34m>>\\033[0m Checking images, this step could take a moment"
     fi
     TOT="0"
-    ls -1BR $DPATH | tr -d ':' | grep -v "^$" | grep "\/" | grep -v "\/data$" | grep -v "\/BACKUP$" > $TEMP/matew-$USER/dirs
+    ls -1BR $DPATH | tr -d ':' | grep -v "^$" | grep "\/" | grep -v "\/data$" | grep -v "\/BACKUP$" | grep -v "\/altstyles$" > $TEMP/matew-$USER/dirs
     for DIR in `cat $TEMP/matew-$USER/dirs`; do
       DIR="`echo ${DIR%/}`"
 
-      ls -1B $DIR | grep -v ".html$" | grep -v ".css$" | grep -v "description" | grep -v "BACKUP" > $TEMP/matew-$USER/files 2>/dev/null
+      ls -1B $DIR | grep -v ".html$" | grep -v ".css$" | grep -v "description" | grep -v "BACKUP" | grep -v "altstyles" > $TEMP/matew-$USER/files 2>/dev/null
       if [ -s $TEMP/matew-$USER/files ]; then
         for FILE in `cat $TEMP/matew-$USER/files`; do
            echo $FILE | grep -q "[aA][vV][iI]"
@@ -244,7 +244,7 @@ checks() {
     done
 
     if [ -f $TEMP/matew-$USER/empty ]; then
-      cat $TEMP/matew-$USER/empty | grep -v "BACKUP" > $TEMP/matew-$USER/empty
+      cat $TEMP/matew-$USER/empty | grep -v "BACKUP" | grep -v "altstyles" > $TEMP/matew-$USER/empty
       for ITEM in `cat $TEMP/matew-$USER/empty`; do
         if [ -z "`cat $TEMP/matew-$USER/images | grep $ITEM`" ]; then
           cat $TEMP/matew-$USER/dirs | grep -v "`echo "$ITEM" | sed -n 's/.*\/\([^/]*.*\).*/\1/p'`" > $TEMP/matew-$USER/dirs
@@ -520,6 +520,13 @@ html_open() {
   echo "<meta name=\"robots\" content=\"all\">" >> $1.html
   echo "<title>$2</title>" >> $1.html
   echo "<link rel=\"stylesheet\" href=\"${3}style.css\" type=\"text/css\">" >> $1.html
+
+  if [ "$ALTSTYLES" = "yes" ]; then
+    for ALTSTYLE in `ls -1 $DPATH/altstyles`; do
+      echo "<link rel=\"alternate stylesheet\" href=\"${3}altstyles/$ALTSTYLE\" type=\"text/css\" title=\"`echo $ALTSTYLE | sed -e 's/.css//g'`\">" >> $1.html
+    done
+  fi
+
   echo "</head>" >> $1.html
   echo "<body>" >> $1.html
 }
@@ -808,7 +815,7 @@ html_middle6() {
     echo "           <td width=\"30%\" align=\"right\">" >> $1.html
 
     SACOUNT="0"
-    ls -1BF $DIR/$ALBUM | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.ssubalbums
+    ls -1BF $DIR/$ALBUM | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/'altstyles\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.ssubalbums
     rm -f $TEMP/matew-$USER/.ssubalbums.new 2>/dev/null
     if [ -f "$TEMP/matew-$USER/data_no_dirs" ]; then
       for NODIR in `cat $TEMP/matew-$USER/data_no_dirs`; do
@@ -1898,6 +1905,15 @@ process_sl() {
     cp -f $STYLES_DIR/$STYLE.css $DPATH/style.css
   fi
 
+  if [ "$ALTSTYLES" = "yes" ]; then
+    if [ ! -d $DPATH/altstyles ]; then
+      rm -f $DPATH/altstyles 2>/dev/null
+      mkdir $DPATH/altstyles
+    fi
+    cp -f $STYLES_DIR/*.css $DPATH/altstyles
+    rm -f $DPATH/altstyles/$STYLE.css
+  fi
+
   . $LANGS_DIR/$LANG
 }
 
@@ -1906,7 +1922,7 @@ process_html() {
 
   DIR=""
   for DIR in `cat $TEMP/matew-$USER/data_dirs.uniq`; do
-    ls -1BF $DIR | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
+    ls -1BF $DIR | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/'altstyles\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
     rm -f $TEMP/matew-$USER/.subalbums.new 2>/dev/null
     for ITEM in `cat $TEMP/matew-$USER/.subalbums`; do
       if [ -z "`cat $TEMP/matew-$USER/dirs | sed -n 's/.*\/\([^/]*.*\).*/\1/p' | grep $ITEM`" ]; then
@@ -1957,7 +1973,7 @@ process_html() {
   rm $TEMP/matew-$USER/.dirtree 2>/dev/null
   if [ -f "$TEMP/matew-$USER/main_dirs" ]; then
     for DIR in `cat $TEMP/matew-$USER/main_dirs`; do
-      ls -1BF $DIR | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
+      ls -1BF $DIR | grep -v '^$' | grep '\/' | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/'altstyles\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
       rm -f $TEMP/matew-$USER/.subalbums.new 2>/dev/null
       for ITEM in `cat $TEMP/matew-$USER/.subalbums`; do
         if [ -z "`cat $TEMP/matew-$USER/dirs | sed -n 's/.*\/\([^/]*.*\).*/\1/p' | grep $ITEM`" ]; then

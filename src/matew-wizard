@@ -96,7 +96,7 @@ style() {
   if [ -z "$QUERY" ]; then
     echo -e "\n\033[1mAlbum pages CSS style\033[0m (STYLE)\n\
 The style parameter identifies a CSS style, which is the apparance that you\n\
-want to apply to your album.\n\
+want to apply to your album by default.\n\
 Currently, the available CSS styles are:\n
 `ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g'`"
   fi
@@ -110,6 +110,31 @@ Currently, the available CSS styles are:\n
     echo "Sorry, invalid answer."
     QUERY="open"
     style
+  fi
+  QUERY=""
+}
+
+altstyles() {
+  if [ -z "$QUERY" ]; then
+    echo -e "\n\033[1mAlbum pages alternative CSS style\033[0m (ALTSTYLES)\n\
+The alternative styles parameter is a boolean variable that identifies the\n\
+possibility to visualize different CSS styles in a single album. This will\n\
+can be done choosing with your web browser which style you want to be\n\
+applied. For example, with Mozilla, choose the style from the menu\n\
+View -> Use Style."
+  fi
+  echo -e "\nDo you want to activate the alternative styles? [default: $ALTSTYLES] \c"
+  read ITEM
+  if [ -z "$ITEM" ]; then
+    echo "ALTSTYLES=\"$ALTSTYLES\"" >> $TEMP/.matew-wizard-$USER
+  elif [ "$ITEM" = "yes" ]; then
+    echo "ALTSTYLES=\"yes\"" >> $TEMP/.matew-wizard-$USER
+  elif [ "$ITEM" = "no" ]; then
+    echo "ALTSTYLES=\"no\"" >> $TEMP/.matew-wizard-$USER
+  elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
+    echo "Sorry, invalid answer."
+    QUERY="open"
+    altstyles
   fi
   QUERY=""
 }
@@ -183,6 +208,7 @@ album pages a link to your home page."
     echo "LINK_TAG=\"$LINK_TAG\"" >> $TEMP/.matew-wizard-$USER
   elif [ -z "$ITEM" -o "$ITEM" = "no" ]; then
     echo "LINK=\"\"" >> $TEMP/.matew-wizard-$USER
+    echo "LINK_TAG=\"\"" >> $TEMP/.matew-wizard-$USER
   elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
@@ -249,7 +275,7 @@ boxes? [default: $VALIDATOR] \c"
     echo "VALIDATOR=\"yes\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" = "no" ]; then
     echo "VALIDATOR=\"no\"" >> $TEMP/.matew-wizard-$USER
-  elif [ "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
+  elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
     validator
@@ -271,7 +297,7 @@ maintain the original image size when creating its thumbnail."
     echo "RATIO=\"yes\"" >> $TEMP/.matew-wizard-$USER
   elif [ "$ITEM" = "no" ]; then
     echo "RATIO=\"no\"" >> $TEMP/.matew-wizard-$USER
-  elif [ "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
+  elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
     ratio
@@ -316,6 +342,7 @@ main() {
   # Set the defaults for all variables
   CHARSET="UTF-8"
   STYLE="bluenavy"
+  ALTSTYLES="yes"
   LANG="en"
   LINK=""
   THUMBS_PL="4"
@@ -324,7 +351,7 @@ main() {
   RATIO="yes"
   SCALED="3"
 
-  # Override those values if the user had set them before.
+  # Override those values if the user had set them before
   if [ -f $CONFIG_FILE ]; then
     . $CONFIG_FILE
   fi
@@ -341,6 +368,7 @@ HEADER
   start
   charset
   style
+  altstyles
   language
   extlink
   thumbnails_pl
