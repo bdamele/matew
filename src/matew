@@ -33,7 +33,7 @@ SCRIPT_NAME="Matew"
 SCRIPT_PID="`ps a | grep matew | awk '{print $1}' | head -1`"
 SCRIPT_PATH="`ls -l /proc/$SCRIPT_PID/fd 2>/dev/null | grep matew | awk '{print $11}' | sed -n 's/\([^/]*.*[/$]\).*/\1/p'`"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.6-rc1"
+SCRIPT_VERSION="1.6-rc2"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -554,7 +554,7 @@ html_image_path() {
   if [ ! -z "$LINK" ]; then
     echo "       <tr>" >> $1.html
     echo "        <td colspan=\"1\" align=\"left\" class=\"table_paths\">" >> $1.html
-    echo "         <a href=\"$LINK\">Homepage</a>" >> $1.html
+    echo "         <a href=\"$LINK\">$LINK_TAG</a>" >> $1.html
   fi
 
   if [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
@@ -611,7 +611,7 @@ html_middle1() {
   if [ ! -z "$LINK" ]; then
     echo "       <tr>" >> $1.html
     echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
-    echo "         <a href=\"$LINK\">Homepage</a>" >> $1.html
+    echo "         <a href=\"$LINK\">$LINK_TAG</a>" >> $1.html
   elif [ `cat $TEMP/matew-$USER/data_dirs.uniq | wc -l | sed s/^\ *//` -gt 1 ]; then
     echo "       <tr>" >> $1.html
     echo "        <td colspan=\"2\" align=\"left\" class=\"table_paths\">" >> $1.html
@@ -1555,7 +1555,13 @@ html_thumbindex() {
     echo "         <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">" >> $DIR/index$SUFFIX.html
     echo "          <tr>" >> $DIR/index$SUFFIX.html
     echo "           <td colspan=\"3\" align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            $TFILENAME" >> $DIR/index$SUFFIX.html
+
+    if [ "`echo "$TFILENAME" | wc -c`" -gt 20 ]; then
+      echo "            `echo $TFILENAME | cut -c -12`..." >> $DIR/index$SUFFIX.html
+    else
+      echo "            $TFILENAME" >> $DIR/index$SUFFIX.html
+    fi
+
     echo "           </td>" >> $DIR/index$SUFFIX.html
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "          <tr>" >> $DIR/index$SUFFIX.html
@@ -1565,13 +1571,13 @@ html_thumbindex() {
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "          <tr>" >> $DIR/index$SUFFIX.html
     echo "           <td align=\"right\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/Sm_$FILENAME.html\">$W_SM</a>" >> $DIR/index$SUFFIX.html
+    echo "            <a href=\"./data/Sm_$FILENAME.html\" title=\"$W_SMALL\">$W_SM</a>" >> $DIR/index$SUFFIX.html
     echo "           </td>" >> $DIR/index$SUFFIX.html
     echo "           <td align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/Med_$FILENAME.html\">$W_MED</a>" >> $DIR/index$SUFFIX.html
+    echo "            <a href=\"./data/Med_$FILENAME.html\" title=\"$W_MEDIUM\">$W_MED</a>" >> $DIR/index$SUFFIX.html
     echo "           </td>" >> $DIR/index$SUFFIX.html
     echo "           <td align=\"left\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/$FILENAME.html\">$W_LG</a>" >> $DIR/index$SUFFIX.html
+    echo "            <a href=\"./data/$FILENAME.html\" title=\"$W_LARGE\">$W_LG</a>" >> $DIR/index$SUFFIX.html
     echo "           </td>" >> $DIR/index$SUFFIX.html
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "         </table>" >> $DIR/index$SUFFIX.html

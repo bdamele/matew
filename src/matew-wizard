@@ -135,9 +135,14 @@ Till now the supported languages are brazilian portuguese (br), english\n\
   QUERY=""
 }
 
-extlink_ans() {
+extlink_lnk() {
   echo -e "\nWhich is the link? \c"
-  read ANS
+  read LNK
+}
+
+extlink_tag() {
+  echo -e "\nWhich is the link tag? [default: Home] \c"
+  read TAG
 }
 
 extlink() {
@@ -151,12 +156,18 @@ album pages a link to your home page."
   echo -e "\nDo you want to add an external HTML link? [default: no] \c"
   read ITEM
   if [ "$ITEM" = "yes" ]; then
-    extlink_ans
-    if [ -z "$ANS" ]; then
+    extlink_lnk
+    if [ -z "$LNK" ]; then
       echo -e "Sorry, invalid answer."
-      extlink_ans
+      extlink_lnk
     fi
-    echo "LINK=\"$ANS\"" >> $TEMP/.matew-wizard-$USER
+    echo "LINK=\"$LNK\"" >> $TEMP/.matew-wizard-$USER
+    extlink_tag
+    if [ -z "$TAG" ]; then
+      echo "LINK_TAG=\"Home\"" >> $TEMP/.matew-wizard-$USER
+    else
+      echo "LINK_TAG=\"$TAG\"" >> $TEMP/.matew-wizard-$USER
+    fi
   elif [ -z "$ITEM" -o "$ITEM" = "no" ]; then
     echo "LINK=\"\"" >> $TEMP/.matew-wizard-$USER
   elif [ ! -z "$ITEM" -a "$ITEM" != "yes" -a "$ITEM" != "no" ]; then

@@ -12,7 +12,7 @@ Matew v1.6 - Released on X Feb 2004 - XXXX lines
   * $CONF/conf -> $CONF/matewrc
   * Adapted install, uninstall, matew and matew_wizard scripts
 + Added support for a standard link to an external HTML page
-  * Added extlink() and extlink_ans() to matew-wizard
+  * Added extlink(), extlink_lnk() and extlink_tag() to matew-wizard
   * Revised html_middle1(), html_path1(), html_path2() and
     html_image_path()
 + Added customizable thumbnails per page number
@@ -24,6 +24,8 @@ Matew v1.6 - Released on X Feb 2004 - XXXX lines
   * Moved STYLES_DIR and LANGS_DIR checks from process_html() to
     process_sl()
 + Added an if check to ENDPOINT in html_image_path()
++ Added filename lenght check to html_thumbindex()
++ Added title value to a tag in html_thumbindex()
 ! Moved album statistics lines from main() to process_html_stats()
 ! Fixed the html_close 'Matew-created' line
 ! Fixed an important check to DPATH and TPATH syntax
