@@ -19,6 +19,7 @@ fi
 RBINS="/usr/bin"
 RCONF="/etc"
 RDOCS="/usr/share/doc"
+RMAN="/usr/share/man/man1"
 
 # Functions
 help() {
@@ -68,9 +69,13 @@ main() {
   # Copying documentation files to $RDOCS/matew-$SCRIPT_VERSION
   rm -rf $RDOCS/matew-* 2>/dev/null
   mkdir -m 755 $RDOCS/matew-$SCRIPT_VERSION
-  for FILE in `ls -1 $SCRIPT_PATH/doc` ; do
+  for FILE in `ls -1 $SCRIPT_PATH/doc | grep -v "man"` ; do
     cp -rf $SCRIPT_PATH/doc/$FILE $RDOCS/matew-$SCRIPT_VERSION/$FILE
   done
+
+  # Copying manual page $RMAN
+  rm -rf $RMAN/matew.1.gz 2>/dev/null
+  cp -rf $SCRIPT_PATH/doc/man/matew.1.gz $RMAN/matew.1.gz
 
   echo -e "\n\033[1mMatew files installed successfully!\033[0m\n\
 Run matew-wizard and read instructions.\n"

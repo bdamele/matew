@@ -5,13 +5,13 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v1.6 - Released on X Feb 2004 - XXXX lines
-------------------------------------------------
+Matew v1.6 - Released on 10 Feb 2004 - 1969 lines
+-------------------------------------------------
 + Updated file name
   * matew-$SCRIPT_VERSION -> matew
   * $CONF/conf -> $CONF/matewrc
   * Adapted install, uninstall, matew and matew_wizard scripts
-+ Added support for a standard link to an external HTML page
++ Added support for a standard link to an external file
   * Added extlink(), extlink_lnk() and extlink_tag() to matew-wizard
   * Revised html_middle1(), html_path1(), html_path2() and
     html_image_path()
@@ -26,10 +26,13 @@ Matew v1.6 - Released on X Feb 2004 - XXXX lines
 + Added an if check to ENDPOINT in html_image_path()
 + Added filename lenght check to html_thumbindex()
 + Added title value to a tag in html_thumbindex()
-! Moved album statistics lines from main() to process_html_stats()
++ Matew manual page written and added to the package
+  * Adapted install and uninstall scripts
+! Moved album statistics lines from main() to process_album_stats()
 ! Fixed the html_close 'Matew-created' line
 ! Fixed an important check to DPATH and TPATH syntax
 ! Fixed an if condition into process_information_files()
+! Minor bug fixes in install, uninstall, matew and matew-wizard scripts
 - Removed while cycle in 'Parse option flags' section
 
 Matew v1.5 - Released on 5 Feb 2004 - 1893 lines

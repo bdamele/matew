@@ -62,8 +62,8 @@ follows:
          the first you run matew on a certain <source path>.
          Then you can edit these files to setup album name, album description,
          album image identifier and a long description for one or more
-         images. And now run matew without the -i flag. You will notice that
-         now that there are more information in the album output pages.
+         images. Later run matew without the -i flag. You will notice that
+         now there are more information in the album output pages.
          
 
 Installation
@@ -76,7 +76,7 @@ and run the install script:
 # ./install
 
 This will put the script executable files into /usr/bin, language and style
-directories into /etc/matew/ and documentation files into
+directories into /etc/matew and documentation files into
 /usr/share/doc/matew-1.6.
 
 Now you can run matew from wherever you want. For further information about
