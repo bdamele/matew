@@ -5,9 +5,10 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v1.9 - Released on XX Mar 2004 - XXXX lines
--------------------------------------------------
+Matew v1.9 - Released on 6 Apr 2004 - 2107 lines
+------------------------------------------------
 + Added swedish language support file
+! Revised checks() function
 ! Source code revised
 ! Small bug fixed in matew
 

@@ -32,7 +32,7 @@ AUTHOR_EMAIL="bernardo@linux.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="$(pwd)"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.9-rc2"
+SCRIPT_VERSION="1.9"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -195,24 +195,9 @@ checks() {
       ls -1B $DIR | grep -v ".html$" | grep -v ".css$" | grep -v "description" | grep -v "BACKUP" | grep -v "altstyles" > $TEMP/matew-$USER/files 2>/dev/null
       if [ -s $TEMP/matew-$USER/files ]; then
         for FILE in $(cat $TEMP/matew-$USER/files); do
-           echo $FILE | grep -q "[aA][vV][iI]"
+           echo $FILE | grep -q "[amtAMT][vpxVPX][igtIGT]"
            if [ $? -eq 0 ]; then
              cat $TEMP/matew-$USER/files | grep -v "$FILE" > $TEMP/matew-$USER/files
-           else
-             echo $FILE | grep -q "[mM][pP][gG]"
-             if [ $? -eq 0 ]; then
-               cat $TEMP/matew-$USER/files | grep -v "$FILE" > $TEMP/matew-$USER/files
-             else
-               echo $FILE | grep -q "[mM][pP][eE][gG]"
-               if [ $? -eq 0 ]; then
-                 cat $TEMP/matew-$USER/files | grep -v "$FILE" > $TEMP/matew-$USER/files
-               else
-                 echo $FILE | grep -q "[tT][xX][tT]"
-                 if [ $? -eq 0 ]; then
-                   cat $TEMP/matew-$USER/files | grep -v "$FILE" > $TEMP/matew-$USER/files
-                 fi
-               fi
-             fi
            fi
         done
       fi
