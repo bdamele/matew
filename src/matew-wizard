@@ -19,7 +19,7 @@
 
 # Script details (Do NOT edit this parameters)
 SCRIPT_NAME="Matew-wizard"
-SCRIPT_PATH=$(pwd)
+SCRIPT_PATH="$(pwd)"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -97,7 +97,7 @@ style() {
     echo -e "\n\033[1mAlbum pages CSS style\033[0m (STYLE)\n\
 The style parameter identifies a CSS style, which is the apparance that you\n\
 want to apply to your album by default.\n\
-Currently, the available CSS styles are:\n
+Currently, the available CSS styles are:\n\n\
 $(ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g')"
   fi
   echo -e "\nWhich CSS style do you choose? [default: $STYLE] \c"
@@ -144,8 +144,8 @@ language() {
     echo -e "\n\033[1mAlbum pages texts language\033[0m (LANG)\n\
 The language parameter is a two-letters word that identifies the language\n\
 you want the text in album pages to be.\n\
-Currently, the supported languages are brazilian portuguese (br), english\n\
-(en), croatian (hr) and italian (it)."
+Currently, the supported languages are:\n\n\
+$(ls -1 $LANGS_DIR | grep -v 'README')"
   fi
   echo -e "\nWhat language do you choose? [default: $LANG] \c"
   read ITEM
