@@ -16,10 +16,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GOPYING file for more details.
 
-# Script details
+# Script details (Do NOT edit this parameters)
 SCRIPT_NAME="Matew-cleanup"
 
-# Configuration parameters
+# Configuration parameters (Do NOT edit this parameters)
 TEMP="/tmp"
 
 # Matew-cleanup functions

@@ -17,11 +17,11 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GOPYING file for more details.
 
-# Script details
+# Script details (Do NOT edit this parameters)
 SCRIPT_NAME="Matew-wizard"
 
-# Configuration parameters
-CONF="$HOME/.matew"
+# Configuration parameters (Do NOT edit these parameters)
+CONFIG_FILE="$HOME/.matew/matewrc"
 RCONF="/etc"
 TEMP="/tmp"
 
@@ -178,44 +178,44 @@ album pages a link to your home page."
   QUERY=""
 }
 
-thumbnails_pc() {
-  if [ -z "$QUERY" ]; then
-    echo -e "\n\033[1mNumber of thumbnails per column\033[0m (THUMBS_PC)\n\
-This parameter is a valid number that identifies the amount of thumbnails\n\
-you want to be visualized per column.\n\
-Note: This value must be a number within 2 and 4."
-  fi
-  echo -e "\nHow many thumbnails per colum do do you choose? [default: 4] \c"
-  read ITEM
-  if [ -z "$ITEM" ]; then
-    echo "THUMBS_PC=\"4\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 2 ] || [ $ITEM -gt 4 ]; then
-    echo -e "Sorry, invalid answer."
-    QUERY="open"
-    thumbnails_pc
-  else
-    echo "THUMBS_PC=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
-  fi
-  QUERY=""
-}
-
 thumbnails_pl() {
   if [ -z "$QUERY" ]; then
     echo -e "\n\033[1mNumber of thumbnails per line\033[0m (THUMBS_PL)\n\
 This parameter is a valid number that identifies the amount of thumbnails\n\
 you want to be visualized per line.\n\
-Note: This value must be a number within 1 and 20."
+Note: This value must be a number within 1 and 5."
   fi
-  echo -e "\nHow many thumbnails per line do do you choose? [default: 5] \c"
+  echo -e "\nHow many thumbnails per line do do you choose? [default: 4] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
-    echo "THUMBS_PL=\"5\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
+    echo "THUMBS_PL=\"4\"" >> $TEMP/.matew-wizard-$USER
+  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 5 ]; then
     echo -e "Sorry, invalid answer."
     QUERY="open"
     thumbnails_pl
   else
     echo "THUMBS_PL=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
+  fi
+  QUERY=""
+}
+
+thumbnails_pc() {
+  if [ -z "$QUERY" ]; then
+    echo -e "\n\033[1mNumber of thumbnails per column\033[0m (THUMBS_PC)\n\
+This parameter is a valid number that identifies the amount of thumbnails\n\
+you want to be visualized per column.\n\
+Note: This value must be a number within 1 and 20."
+  fi
+  echo -e "\nHow many thumbnails per column do do you choose? [default: 5] \c"
+  read ITEM
+  if [ -z "$ITEM" ]; then
+    echo "THUMBS_PC=\"5\"" >> $TEMP/.matew-wizard-$USER
+  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
+    echo -e "Sorry, invalid answer."
+    QUERY="open"
+    thumbnails_pc
+  else
+    echo "THUMBS_PC=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   fi
   QUERY=""
 }
@@ -277,20 +277,23 @@ HEADER
   style
   language
   extlink
-  thumbnails_pc
   thumbnails_pl
+  thumbnails_pc
   validator
   ratio
 
   if [ ! -d "$HOME/.matew" ]; then
+    rm -rf $HOME/.matew 2>/dev/null
     mkdir $HOME/.matew
-  else
-    rm -rf $HOME/.matew/matewrc
   fi
 
-  cp -f $TEMP/.matew-wizard-$USER $CONF/matewrc
+  if [ -f $CONFIG_FILE ]; then
+    mv $CONFIG_FILE $HOME/.matew/matewrc-`stat -c=%y $CONFIG_FILE | tr -d ':+=-' | sed -e 's/ //g' | tr '.' ' ' | awk '{print $1}'`
+  fi
 
-  echo -e "\n\033[1mAll done!\033[0m\nThe configuration file has been saved to $CONF/matewrc.\n\
+  cp -f $TEMP/.matew-wizard-$USER $CONFIG_FILE
+
+  echo -e "\n\033[1mAll done!\033[0m\nThe configuration file has been saved to $CONFIG_FILE.\n\
 You can now run matew."
 
   cleanup 0
