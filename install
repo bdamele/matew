@@ -6,7 +6,7 @@
 
 # Script details
 SCRIPT_PATH="`pwd`"
-SCRIPT_VERSION="1.8"
+SCRIPT_VERSION="1.9"
 
 # Checking if you have root access
 if [ `id -u` -ne 0 ]; then
