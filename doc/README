@@ -22,16 +22,16 @@ follows:
 
 1. Unpack the source into your home directory:
 
-   # tar xfz matew-1.8.tar.gz
+   # tar xfz matew-1.9.tar.gz
 
    or
 
-   # tar xfj matew-1.8.tar.bz2
+   # tar xfj matew-1.9.tar.bz2
 
 
 2. Run matew-wizard to setup the configuration file:
 
-   # cd ./matew-1.8/src
+   # cd ./matew-1.9/src
    # ./matew-wizard
 
    Note: Read the instruction carefully
@@ -72,12 +72,12 @@ Installation
 To install the script login as root then, enter the unpacked matew directory
 and run the install script:
 
-# cd ./matew-1.8
+# cd ./matew-1.9
 # ./install
 
 This will put the script executable files into /usr/bin, language and style
 directories into /etc/matew and documentation files into
-/usr/share/doc/matew-1.8.
+/usr/share/doc/matew-1.9.
 
 Now you can run matew from wherever you want. For further information about
 the usage read the 'Usage' paragraph.
@@ -109,7 +109,6 @@ Contacts
 Feel free to contact me for comments, suggestions, bug reports or patches:
 
 Homepage:   http://matew.sourceforge.net
-E-Mail:     bernardo@inquis.it
-Irc:        #bash@irc.azzurra.org
+E-Mail:     bernardo@linux.it
 Icq UIN:    168841601
 Jabber ID:  inquis@jabber.linux.it

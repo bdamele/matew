@@ -5,13 +5,21 @@ Matew - Make Album The Easy Way
 Thanks to
 ---------
 
-Alberto 'AlbertoZ' Zennaro <morph@ngi.it>
+Alberto 'Albertoz' Zennaro <morph@ngi.it>
   Alternate stylesheet editor
 
-Alex 'loner' Sosic <loner@cisc.it>
+Alex 'loner' Sosic <loner@ccni.it>
   Support for croatian language,
   Web logo co-creator,
   Useful tips
+
+Arvid Andersson <arvid@linux.se>
+  Support for swedish language,
+  Language files bug wrangler
+
+Diego 'Flameeyes' Pettenò <dgp85@users.sourceforge.net>
+  Gentoo Linux ebuild first version creator,
+  Beta testing
 
 Jeremiah 'jemfinch' Fincher <jemfinch@users.sourceforge.net>
   Some parts of matew-wizard standard output messages are

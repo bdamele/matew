@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Name: Matew - Make Album The Easy Way
-# Author: Bernardo 'inquis' Damele <bernardo@inquis.it>
+# Author: Bernardo 'inquis' Damele <bernardo@linux.it>
 #
 # Matew is a valid HTML/CSS generator for static image albums. It supports
 # retrieving information from EXIF cameras and includes customizable options
@@ -28,11 +28,11 @@
 
 # Script details (Do NOT edit these details)
 AUTHOR_NAME="Bernardo 'inquis' Damele"
-AUTHOR_EMAIL="bernardo@inquis.it"
+AUTHOR_EMAIL="bernardo@linux.it"
 SCRIPT_NAME="Matew"
-SCRIPT_PATH=$(pwd)
+SCRIPT_PATH="$(pwd)"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.9-rc1"
+SCRIPT_VERSION="1.9-rc2"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -123,7 +123,7 @@ cleanup() {
 }
 
 error() {
-  echo -e "\\033[0;31mERROR\\033[0m: This script depends on both \\033[0;36mconvert\\033[0m and \\033[0;36midentify\\033[0m,\n\
+  echo -e "\\033[0;31mERROR\\033[0m: Matew depends on both \\033[0;36mconvert\\033[0m and \\033[0;36midentify\\033[0m,\n\
        two command line tools. Install the ImageMagick package."
   cleanup 1
 }
@@ -226,7 +226,7 @@ checks() {
               echo $DIR/$FILE >> $TEMP/matew-$USER/images
               echo $DIR/$FILE >> $TEMP/matew-$USER/DIRS/$(echo $DIR | sed -n 's/.*\/\([^/]*.*\).*/\1/p')
             else
-              echo "$DIR/$FILE" >> $TEMP/matew-$USER/no_images
+              echo $DIR/$FILE >> $TEMP/matew-$USER/no_images
               if [ $VERBOSE -ge 1 ]; then
                 echo -e "         \\033[0;34m>\\033[0m \\033[0;36m$DIR/$FILE\\033[0m is not a valid image, skipping"
               fi
@@ -268,8 +268,8 @@ checks() {
         mkdir -p $TPATH
       fi
 
-      TPATH="$(echo ${TPATH%/} | sed s/'\/'/'\\\/'/g)"
-      NDPATH="$(echo ${DPATH%/} | sed s/'\/'/'\\\/'/g)"
+      TPATH="`echo ${TPATH%/} | sed -e \"s/\//\\\//g\"`"
+      NDPATH="`echo ${DPATH%/} | sed -e \"s/\//\\\//g\"`"
 
       for DIR in $(cat $TEMP/matew-$USER/dirs); do
         echo "${DIR/$NDPATH/$TPATH}" >> $TEMP/matew-$USER/dirs.new
@@ -279,7 +279,6 @@ checks() {
         fi
       done
       mv $TEMP/matew-$USER/dirs.new $TEMP/matew-$USER/dirs
-
       for IMAGE in $(cat $TEMP/matew-$USER/images); do
         echo "${IMAGE/$NDPATH/$TPATH}" >> $TEMP/matew-$USER/images.new
 
@@ -1287,7 +1286,7 @@ html_image_information() {
     if [ $(cat $TEMP/matew-$USER/.exif_info | wc -l | sed s/'^\ *'/''/) -eq 1 ] && [ ! -z "$(cat $TEMP/matew-$USER/.exif_info | grep "Software:" | sed s/'Software: '/''/g)" ]; then
       echo "       <tr>" >> $1.html
       echo "        <td align=\"left\" class=\"table_text\">" >> $1.html
-      echo "         <abbr title=\"Software used to edit the $W_IMAGE\">Software</abbr>" >> $1.html
+      echo "         <abbr title=\"$W_S_TITLE\">$W_S</abbr>" >> $1.html
       echo "        </td>" >> $1.html
       echo "        <td align=\"right\" class=\"table_text_out\">" >> $1.html
       echo "         <tt>$(cat $TEMP/matew-$USER/.exif_info | grep "Software:" | sed s/'Software: '/''/g)</tt>" >> $1.html
@@ -1345,7 +1344,7 @@ html_image_information() {
     if [ ! -z "$(cat $TEMP/matew-$USER/.exif_info | grep "Software:" | sed s/'Software: '/''/g)" ]; then
       echo "       <tr>" >> $1.html
       echo "        <td align=\"left\" class=\"table_text\">" >> $1.html
-      echo "         <abbr title=\"Firmware (internal software of digicam) version number\">Camera software</abbr>" >> $1.html
+      echo "         <abbr title=\"$W_CS_TITLE\">$W_CS</abbr>" >> $1.html
       echo "        </td>" >> $1.html
       echo "        <td align=\"right\" class=\"table_text_out\">" >> $1.html
       echo "         <tt>$(cat $TEMP/matew-$USER/.exif_info | grep "Software:" | sed s/'Software: '/''/g)</tt>" >> $1.html
@@ -1516,14 +1515,14 @@ html_pre_thumbindex() {
       if [ $TPAGES -eq 0 ]; then
         echo "            $W_TP" >> $1.html
       else
-        echo "            $W_TP $(expr $ITEM \+ 1)" >> $1.html
+        echo "            $W_TP $(expr $ITEM \+ 1 2>/dev/null)" >> $1.html
       fi
     elif [ $ITEM -eq 0 ] && [ -f $DIR/index0.html ]; then
-      echo "           <a href=\"./index0.html\">$W_TP $(expr $ITEM \+ 1)</a>" >> $1.html
+      echo "           <a href=\"./index0.html\">$W_TP $(expr $ITEM \+ 1 2>/dev/null)</a>" >> $1.html
     elif [ $ITEM -eq 0 ]; then
-      echo "           <a href=\"./index.html\">$W_TP $(expr $ITEM \+ 1)</a>" >> $1.html
+      echo "           <a href=\"./index.html\">$W_TP $(expr $ITEM \+ 1 2>/dev/null)</a>" >> $1.html
     else
-      echo "           <a href=\"./index$ITEM.html\">$W_TP $(expr $ITEM \+ 1)</a>" >> $1.html
+      echo "           <a href=\"./index$ITEM.html\">$W_TP $(expr $ITEM \+ 1 2>/dev/null)</a>" >> $1.html
     fi
     echo "          </td>" >> $1.html
     echo "         </tr>" >> $1.html
@@ -1539,7 +1538,7 @@ html_pre_thumbindex() {
     if [ -z "$SUFFIX" ]; then
       echo "         1/$TOTPAGES" >> $1.html
     else
-      echo "         $(expr $SUFFIX \+ 1)/$TOTPAGES" >> $1.html
+      echo "         $(expr $SUFFIX \+ 1 2>/dev/null)/$TOTPAGES" >> $1.html
     fi
   fi
 
@@ -1586,14 +1585,14 @@ html_post_thumbindex() {
       if [ $TPAGES -le 0 ]; then
         echo "         &nbsp;" >> $1.html
       else
-        echo "         $(expr $ITEM \+ 1)&nbsp;" >> $1.html
+        echo "         $(expr $ITEM \+ 1 2>/dev/null) &nbsp;" >> $1.html
       fi
     elif [ $ITEM -eq 0 ] && [ -f $DIR/index0.html ]; then
-      echo "         <a href=\"./index0.html\">$(expr $ITEM \+ 1)</a>&nbsp;" >> $1.html
+      echo "         <a href=\"./index0.html\">$(expr $ITEM \+ 1 2>/dev/null)</a>&nbsp;" >> $1.html
     elif [ $ITEM -eq 0 ]; then
-      echo "         <a href=\"./index.html\">$(expr $ITEM \+ 1)</a>&nbsp;" >> $1.html
+      echo "         <a href=\"./index.html\">$(expr $ITEM \+ 1 2>/dev/null)</a>&nbsp;" >> $1.html
     else
-      echo "         <a href=\"./index$ITEM.html\">$(expr $ITEM \+ 1)</a>&nbsp;" >> $1.html
+      echo "         <a href=\"./index$ITEM.html\">$(expr $ITEM \+ 1 2>/dev/null)</a>&nbsp;" >> $1.html
     fi
   done
 }
@@ -1618,7 +1617,7 @@ html_thumbindex() {
     FILENAME=$(echo $IMAGE | sed -n 's/.*\/\([^/]*.*\).*/\1/p')
     TFILENAME=$(identify -format %t $IMAGE 2>/dev/null | head -n 1 | sed s/'_'/'\ '/g | grep -v "^$")
     DESC=$(cat $DIR/image_descriptions | grep "^$FILENAME" | head -n 1 | tr -d '\"\t' | sed s/"$FILENAME"/""/g | sed s/'^\ *'/''/)
-    NUM=$(cat $TEMP/matew-$USER/data_images | nl | grep "$FILENAME$" | awk '{print $1}')
+    NUM=$(cat $TEMP/matew-$USER/data_images | nl | grep "/$FILENAME$" | awk '{print $1}')
     PNUM=$(expr $NUM \- 1)
     PREV=$(cat $TEMP/matew-$USER/data_images | nl | sed s/'^\ *'/''/ | grep "^$PNUM" | head -n 1 | sed -n 's/.*\/\([^/]*\).*/\1/p')
     if [ -z "$PREV" ]; then
@@ -1694,7 +1693,7 @@ html_thumbindex() {
       echo "       <tr>" >> $DIR/index$SUFFIX.html
       NUMLINE="1"
     else
-      NUMLINE=$(expr $NUMLINE \+ 1)
+      NUMLINE="$(expr $NUMLINE \+ 1)"
     fi
 
     if [ $NIMAGE -eq $THUMBS ]; then
@@ -1917,7 +1916,6 @@ process_sl() {
 
 process_html() {
   THUMBS=$(expr $THUMBS_PL \* $THUMBS_PC)
-
   DIR=""
   for DIR in $(cat $TEMP/matew-$USER/data_dirs.uniq); do
     ls -1BF $DIR | grep -v "^$" | grep "\/" | sed s/'data\/'/''/g | sed s/'BACKUP\/'/''/g | sed s/'altstyles\/'/''/g | sed s/^\ *// | sed s/'\/'/''/g > $TEMP/matew-$USER/.subalbums
@@ -1937,7 +1935,7 @@ process_html() {
     cat $TEMP/matew-$USER/.dirtree | tr '\/' '\n' | tr -d '\"' | grep -v "^$" > $TEMP/matew-$USER/.dirtree
     COUNT=$(cat $TEMP/matew-$USER/.dirtree | wc -l | sed s/'^\ *'/''/)
     ALBUMDESC=$(grep -i "Album description" $DIR/album_description | tr -d '\"\t' | sed s/'Album description'/''/g | sed s/'^\ *'/''/)
-    NDIR=$(echo $DIR | sed -n 's/.*\/\([^/]*\)./\1/p')
+    NDIR="$(echo $DIR | sed -n 's/.*\/\([^/]*\)./\1/p')"
     grep "$DIR" $TEMP/matew-$USER/DIRS/$NDIR > $TEMP/matew-$USER/data_images
     TOTIMGS=$(cat $TEMP/matew-$USER/data_images | wc -l | sed s/'^\ *'/''/)
     DIV=$(expr $TOTIMGS \/ $THUMBS)
