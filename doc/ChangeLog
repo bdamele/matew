@@ -1,0 +1,175 @@
+Matew - Make Album The Easy Way      
+-------------------------------      
+
+
+ChangeLog
+---------
+
+Matew v1.6 - Released on X Feb 2004 - XXXX lines
+------------------------------------------------
++ Updated file names
+  * matew-$SCRIPT_VERSION -> matew
+  * Adapted install and uninstall scripts
++ Added support for a standard link to an external HTML page
+  * Added extlink() to matew-wizard
+  * Revised html_middle1(), html_path1(), html_path2() and
+    html_image_path()
++ Added customizable 'thumbnails per page' number
+  * Added thumbnails() to matew-wizard
+  * Moved 20-checks to $THUMBS-checks
++ Added support for accepting customized styles
+  * Added process_sl() to matew
+  * Moved STYLES_DIR and LANGS_DIR checks from process_html() to
+    process_sl()
++ Added an if check to ENDPOINT in html_image_path()
+! Fixed the html_close 'Matew-created' line
+! Fixed an important check to DPATH and TPATH syntax
+
+Matew v1.5 - Released on 5 Feb 2004 - 1893 lines
+------------------------------------------------
++ Added album statistics lines to matew standard output messages
++ Added an important check to DPATH and TPATH syntax
+! Fixed the 'wc -l' command to 'wc -l | sed s/^\ *//'
+! Fixed process_endpoint() checking the NCOUNT value before executing
+  the cycle to make ENDPOINT
+! Fixed the standard output message in uninstall script
+
+Matew v1.4 - Released on 2 Feb 2004 - 1873 lines
+------------------------------------------------
+! Fixed the 20-images possible situations in html_thumbindex' function
+! Fixed album counting ($SACOUNT value)
+! Fixed $TEMP/matew-$USER/data_no_dirs check
+! Fixed $DIR/image_descriptions creation (sort+uniq)
+! Excluded BACKUP-data in function's checking $TEMP/matew-$USER/<files>
+  processing
+! Fixed standard output message in uninstall script
+! Minor bugs fixed in matew-cleanup
+
+Matew v1.3 - Released on 1 Feb 2004 - 1864 lines
+------------------------------------------------
++ Added an extremely big amout of features
+! Source completely rewritten
+! Project registered at SourceForge.net (matew.sourceforge.net)
+
+Matew v1.2 - Released on 12 Jul 2003 - 586 lines
+------------------------------------------------
++ Added some comment lines to the script
++ Added the cleanup function
++ Added the trap to int, kill, alrm and term
+  signals to cleanup function
++ Created the Slackware compatible package:
+  <http://www.inquis.it/scripts/matew-1.2-i386-1.tgz>
++ Rewritted the parsing option session
++ Updated file name
+  * ./settings/matewrc -> ./settings/matew.conf
+  * ./matew -> ./matew-1.2
+! Fixed DPATH checks
+! Fixed NEXT value
+! Fixed the source code
+  * Removed unuseful spaces
+  * Fixed the function declarations
+
+Matew v1.1 - Released on 28 May 2003 - 628 lines
+------------------------------------------------
++ Updated files name
+  * matew.sh -> matew
+  * ./settings/matew.conf -> ./settings/matewrc
++ Added photo exif information extration process
+  * Added PPROP option to configuration file
++ Added MAXWIDTH option to configuration file
+  * Added new feature to calculate the MAXHEIGHT
+    in order to mantain the original images ratio
++ Added an automatically image files name generation
+  for ./settings/comments file
++ Added the title flag to img and ancor html tag
++ Rewritted and revised some functions
+- Removed PAPLINK, PAP4TP, TPLINK, TP4PAP and OI4TP
+  options from configuration file
+! Fixed the ChangeLog structure
+! Fixed the sed command
+! Fixed CONVERT and IDENTIFY variables
+! Fixed some function structures
+
+Matew v1.0 - Released on 13 May 2003 - 604 lines
+------------------------------------------------
++ Added COMMENTS option to configuration file
++ Created settings directory
+  * Moved matew.conf to settings directory
+  * Moved .main.css to settings/main.css
+  * Created comments file in settings directory
++ Updated the README file
++ Added SHOWNAME option to configuration file
+! Fixed the grep flags in checks function
+! Fixed the creating thumbnails function
+! Fixed some checks in the recurse function
+! Fixed the WIDTH value output
+
+Matew v0.9 - Released on 8 May 2003 - 583 lines
+-----------------------------------------------
++ Added CSS support
+  * Deleted some options in configuration file
+  * Added main.css
+  * Updated validator sessions
++ Added SHOWINFO option to configuration file
+! Fixed creating thumbnail session
+  * Created creating_tn function
+  * Added checks to main function
+  * Updated verbose mode
+! Fixed the configuration file reading session
+
+Matew v0.8 - Released on 3 May 2003 - 537 lines
+-----------------------------------------------
+! Fixed identify checks
+! Fixed grep command flags
+! Fixed link options
+
+Matew v0.7 - Released on 2 May 2003 - 484 lines
+-----------------------------------------------
++ Added ratio width check to thumbnails
++ Added width check to original image files
++ Added identify check to original image files
++ Added name check to original image files
++ Completely rewritted options check session
++ Updated verbose mode
++ Rewritted help funtion with cat, no more echo
++ Added nifty variables to the configuration file
++ Added other meta tags to index and thumbnails pages
++ Added blue color in stdout messages
+! Fixed the next value
+! Fixed the date command
+
+Matew v0.6 - Released on 30 Apr 2003 - 423 lines
+------------------------------------------------
++ Added AUTHOR, COPYING, CREDITS, ChangeLog, README and TODO files
++ Added new variables to the configuration file
++ Some parts of the source code rewritted
++ Entire source code indented with spaces, no more tabs
++ Added color in stdout messages
+
+Matew v0.5 - Released on 29 Apr 2003 - 373 lines
+------------------------------------------------
++ Variables support moved from stdin to a configuration file
+! Fixed help and version functions
+
+Matew v0.4 - Released on 26 Apr 2003 - 355 lines
+------------------------------------------------
++ Added some important checks
+! Fixed other bugs
+
+Matew v0.3 - Released on 25 Apr 2003 - 303 lines
+------------------------------------------------
++ First version with variables support
++ Entire source code divided into functions
+! Fixed image files checks
+
+Matew v0.2 - Released on 23 Apr 2003 - 269 lines
+------------------------------------------------
++ Source code indented
++ Source code divided into functions
+! Fixed some bugs
+
+Matew v0.1 - Released on 21 Apr 2003 - 114 lines
+------------------------------------------------
++ First public release
++ Quick and easy tool with many things to do, by the way, it is
+  at his first stage of coding

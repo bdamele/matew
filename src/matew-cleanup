@@ -1,0 +1,109 @@
+#!/bin/bash
+#
+# Name: Matew-cleanup - Make Album The Easy Way Cleanup
+# Author: Bernardo 'inquis' Damele <bernardo@inquis.it>
+#
+# Matew-cleanup deletes recursively all data created by Matew.
+#
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GOPYING file for more details.
+
+# Script details
+SCRIPT_NAME="Matew-cleanup"
+
+# Configuration parameters
+TEMP="/tmp"
+
+# Matew-cleanup functions
+cleanup() {
+  rm -rf $TEMP/.matew-cleanup-$USER 2>/dev/null
+
+  if [ -z "$2" ]; then
+    echo
+  else
+    echo -e "\n\n\033[1mWARNING\\033[0m: It looks like you halted matew-cleanup before it was done.\n\
+         Run it again to completion.\n"
+  fi
+
+  exit $1
+}
+
+help() {
+  cat << HELP
+Usage: `basename $0` [option] <directory path to clean>
+
+$SCRIPT_NAME deletes recursively all data created by Matew.
+
+option:
+  -h                    print this message
+HELP
+
+  cleanup 0
+}
+
+desc() {
+  echo -e "\n$SCRIPT_NAME deletes recursively all data created by Matew."
+}
+
+main() {
+  export IFS=$'\t\n'
+
+  if [ ! -d "$DPATH" ]; then
+    echo -e "\n\\033[0;31mERROR\\033[0m: Path \\033[0;36m$DPATH\\033[0m is not a directory"
+    cleanup 1
+  fi
+
+  find $DPATH -name data > $TEMP/.matew-cleanup-$USER
+  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
+    rm -rf $DIR
+  done
+
+  find $DPATH -name *description* > $TEMP/.matew-cleanup-$USER
+  for FILE in `cat $TEMP/.matew-cleanup-$USER` ; do
+    rm -rf $FILE 2>/dev/null
+  done
+
+  find $DPATH -name *.css > $TEMP/.matew-cleanup-$USER
+  for CSS in `cat $TEMP/.matew-cleanup-$USER` ; do
+    rm -rf $CSS 2>/dev/null
+  done
+
+  find $DPATH -name index*.html > $TEMP/.matew-cleanup-$USER
+  cat $TEMP/.matew-cleanup-$USER | grep -v "BACKUP" > $TEMP/.matew-cleanup-$USER
+  for HTML in `cat $TEMP/.matew-cleanup-$USER` ; do
+    rm -rf $HTML 2>/dev/null
+  done
+
+  find $DPATH -name BACKUP > $TEMP/.matew-cleanup-$USER
+  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
+    DIR="`echo ${DIR%/}`"
+    PDIR="`echo $DIR | sed -n 's/\([^/]*.*[/$]\).*/\1/p'`"
+    mv -f $DIR/* $PDIR 2>/dev/null
+    rm -rf $DIR 2>/dev/null
+  done
+
+  echo -e "\n\033[1mAll done!\033[0m\n\033[0;36m$DPATH\033[0m has been \
+cleaned successfully."
+
+  cleanup 0
+}
+
+# Trap INT, KILL, ALRM and TERM signals
+trap 'cleanup 1 2' 2 9 14 15
+
+# Parse option flags
+if [ -z "$1" -o "$1" = "-h" ]; then
+  help
+  cleanup 0
+else
+  DPATH="$1"
+  main
+fi
