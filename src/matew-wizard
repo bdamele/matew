@@ -19,6 +19,8 @@
 
 # Script details (Do NOT edit this parameters)
 SCRIPT_NAME="Matew-wizard"
+SCRIPT_PID="`ps a | grep matew | awk '{print $1}' | head -1`"
+SCRIPT_PATH="`ls -l /proc/$SCRIPT_PID/fd 2>/dev/null | grep matew | awk '{print $11}' | sed -n 's/\([^/]*.*[/$]\).*/\1/p'`"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -96,14 +98,14 @@ style() {
     echo -e "\n\033[1mAlbum pages CSS style\033[0m (STYLE)\n\
 The style parameter identifies a CSS style, which is the apparance that you\n\
 want to apply to your album.\n\
-Till now the CSS styles are beige, blue, bluenavy, brown, debian, gentoo and\n\
-red."
+Till now the default CSS styles are:\n
+`ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g'`"
   fi
   echo -e "\nWhich CSS style do you choose? [default: bluenavy] \c"
   read ITEM
   if [ -z "$ITEM" -o "$ITEM" = "bluenavy" ]; then
     echo "STYLE=\"bluenavy\"" >> $TEMP/.matew-wizard-$USER
-  elif [ "$ITEM" = "beige" -o "$ITEM" = "blue" -o "$ITEM" = "bluenavy" -o "$ITEM" = "brown" -o "$ITEM" = "debian" -o "$ITEM" = "gentoo" -o "$ITEM" = "red" ]; then
+  elif [ ! -z "`ls -1 $STYLES_DIR | grep "^$ITEM.css"`" ]; then
     echo "STYLE=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
     echo -e "Sorry, invalid answer."
@@ -125,7 +127,7 @@ Till now the supported languages are brazilian portuguese (br), english\n\
   read ITEM
   if [ -z "$ITEM" -o "$ITEM" = "en" ]; then
     echo "LANG=\"en\"" >> $TEMP/.matew-wizard-$USER
-  elif [ "$ITEM" = "br" -o "$ITEM" = "en" -o "$ITEM" = "hr" -o "$ITEM" = "it" ]; then
+  elif [ ! -z "`ls -1 $LANGS_DIR | grep "^$ITEM$"`" ]; then
     echo "LANG=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
     echo -e "Sorry, invalid answer."
@@ -262,7 +264,40 @@ maintain the original image size when creating its thumbnail."
   QUERY=""
 }
 
+scaled() {
+  if [ -z "$QUERY" ]; then
+    echo -e "\n\033[1mNumber of scaled images\033[0m (SCALED)\n\
+The scaled parameter is a valid number that identifies the number of\n\
+scaled images you want Matew to generate for your album.\n\
+Possible values are:\n
+1 - Thumbnails\n\
+2 - Thumbnails, Small\n\
+3 - Thumbnails, Small, Medium"
+  fi
+  echo -e "\nHow many scaled images do you want to be created? [default: 3] \c"
+  read ITEM
+  if [ -z "$ITEM" -o "$ITEM" = "3" ]; then
+    echo "SCALED=\"3\"" >> $TEMP/.matew-wizard-$USER
+  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 3 ]; then
+    echo -e "Sorry, invalid answer."
+    QUERY="open"
+    scaled
+  else
+    echo "SCALED=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
+  fi
+  QUERY=""
+}
+
 main() {
+  if [ "`ls -1 $RCONF/matew/languages 2>/dev/null | wc -l | sed s/^\ *//`" -lt 4 ] || [ "`ls -1 $RCONF/matew/styles 2>/dev/null | wc -l | sed s/^\ *//`" -lt 6 ]; then
+    SCRIPT_PATH="`echo ${SCRIPT_PATH%/}`"
+    LANGS_DIR="$SCRIPT_PATH/languages"
+    STYLES_DIR="$SCRIPT_PATH/styles"
+  else
+    LANGS_DIR="/etc/matew/languages"
+    STYLES_DIR="/etc/matew/styles"
+  fi
+
   cat << HEADER > $TEMP/.matew-wizard-$USER
 # Configuration file for Matew - Make Album The Easy Way
 #
@@ -281,6 +316,7 @@ HEADER
   thumbnails_pc
   validator
   ratio
+  scaled
 
   if [ ! -d "$HOME/.matew" ]; then
     rm -rf $HOME/.matew 2>/dev/null

@@ -11,6 +11,11 @@ Matew v1.7 - Released on X Feb 2004 - XXXX lines
   * Added +s flag in 'Parse option flags' section
   * Adapted a lot of matew sections
   * CSS substitution by default is disabled
++ Added customizable number of generated scaled images
+  * Added scaled() to matew-wizard (SCALED)
+  * Adapted matew
+  * Added W_VIEW variable to language files
++ Modified matew-wizard style() and language() functions
 ! Fixed expr syntax
 ! Fixed .htaccess data processing
 

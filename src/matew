@@ -400,20 +400,44 @@ create_image() {
     echo -e "Done"
   fi
 
-  if [ $VERBOSE -ge 2 ]; then
-    echo -e "           \\033[0;34m>\\033[0m Creating small size \\033[0;36mSm_$ORIGNAME\\033[0m... \c"
-  fi
-  convert -geometry 40% "$IMAGE" $ORIGPATH/data/Sm_$ORIGNAME 1>/dev/null 2>&1
-  if [ $VERBOSE -ge 2 ]; then
-    echo -e "Done"
+  if [ $SCALED -ge 2 ]; then
+    if [ $VERBOSE -ge 2 ]; then
+      echo -e "           \\033[0;34m>\\033[0m Creating small size \\033[0;36mSm_$ORIGNAME\\033[0m... \c"
+    fi
+    convert -geometry 40% "$IMAGE" $ORIGPATH/data/Sm_$ORIGNAME 1>/dev/null 2>&1
+    if [ $VERBOSE -ge 2 ]; then
+      echo -e "Done"
+    fi
   fi
 
-  if [ $VERBOSE -ge 2 ]; then
-    echo -e "           \\033[0;34m>\\033[0m Creating medium size \\033[0;36mMed_$ORIGNAME\\033[0m... \c"
+  if [ $SCALED -eq 3 ]; then
+    if [ $VERBOSE -ge 2 ]; then
+      echo -e "           \\033[0;34m>\\033[0m Creating medium size \\033[0;36mMed_$ORIGNAME\\033[0m... \c"
+    fi
+    convert -geometry 60% "$IMAGE" $ORIGPATH/data/Med_$ORIGNAME 1>/dev/null 2>&1
+    if [ $VERBOSE -ge 2 ]; then
+      echo -e "Done"
+    fi
   fi
-  convert -geometry 60% "$IMAGE" $ORIGPATH/data/Med_$ORIGNAME 1>/dev/null 2>&1
-  if [ $VERBOSE -ge 2 ]; then
-    echo -e "Done"
+}
+
+process_images_check() {
+  if [ "$ANS" = "All" ] || [ "$ANS" = "all" ]; then
+    create_image
+  elif [ "$ANS" != "None" ] && [ "$ANS" != "none" ]; then
+    if [ $VERBOSE -eq 0 ]; then
+      ANS="None"
+    else
+      echo -e "           \\033[0;34m>\\033[0m Data already exists, do you want to process anyway? [Yes|No|All|None] (default: Yes) \c"
+      read ANS
+    fi
+    if [ -z "$ANS" ] || [ "$ANS" = "Yes" ] || [ "$ANS" = "yes" ] || [ "$ANS" = "All" ] || [ "$ANS" = "all" ]; then
+      create_image
+    fi
+  elif [ "$ANS" = "None" ] || [ "$ANS" = "none" ]; then
+    if [ $VERBOSE -ge 1 ]; then
+      echo -e "           \\033[0;34m>\\033[0m Data already exists, skipping"
+    fi
   fi
 }
 
@@ -428,25 +452,23 @@ process_images() {
       echo -e "         \\033[0;34m>\\033[0m Processing image \\033[0;36m$ORIGNAME\\033[0m"
     fi
 
-    if [ ! -e $ORIGPATH/data/Tn_$ORIGNAME ] || [ ! -e $ORIGPATH/data/Sm_$ORIGNAME ] || [ ! -e $ORIGPATH/data/Med_$ORIGNAME ]; then
-      create_image
-    else
-      if [ "$ANS" = "All" ] || [ "$ANS" = "all" ]; then
+    if [ $SCALED -eq 1 ]; then
+      if [ ! -f "$ORIGPATH/data/Tn_$ORIGNAME" ]; then
         create_image
-      elif [ "$ANS" != "None" ] && [ "$ANS" != "none" ]; then
-        if [ $VERBOSE -eq 0 ]; then
-          ANS="None"
-        else
-          echo -e "           \\033[0;34m>\\033[0m Data already exists, do you want to process anyway? [Yes|No|All|None] (default: Yes) \c"
-          read ANS
-        fi
-        if [ -z "$ANS" ] || [ "$ANS" = "Yes" ] || [ "$ANS" = "yes" ] || [ "$ANS" = "All" ] || [ "$ANS" = "all" ]; then
-          create_image
-        fi
-      elif [ "$ANS" = "None" ] || [ "$ANS" = "none" ]; then
-        if [ $VERBOSE -ge 1 ]; then
-          echo -e "           \\033[0;34m>\\033[0m Data already exists, skipping"
-        fi
+      else
+        process_images_check
+      fi
+    elif [ $SCALED -eq 2 ]; then
+      if [ ! -f "$ORIGPATH/data/Tn_$ORIGNAME" ] || [ ! -f "$ORIGPATH/data/Sm_$ORIGNAME" ]; then
+        create_image
+      else
+        process_images_check
+      fi
+    elif [ $SCALED -eq 3 ]; then
+      if [ ! -f "$ORIGPATH/data/Tn_$ORIGNAME" ] || [ ! -f "$ORIGPATH/data/Sm_$ORIGNAME" ] || [ ! -f "$ORIGPATH/data/Med_$ORIGNAME" ]; then
+        create_image
+      else
+        process_images_check
       fi
     fi
   done
@@ -938,18 +960,30 @@ html_image() {
 
     echo "     <td align=\"center\" class=\"table_subtitle2\">" >> $1.html
 
-    if [ "$PREFIX" = "Sm_" ]; then
-      echo "      $W_SMALL" >> $1.html
-      echo "      &nbsp;<a href=\"./Med_$FILENAME.html\">$W_MEDIUM</a>&nbsp;" >> $1.html
-      echo "      <a href=\"./$FILENAME.html\">$W_LARGE</a>" >> $1.html
-    elif [ "$PREFIX" = "Med_" ]; then
-      echo "      <a href=\"./Sm_$FILENAME.html\">$W_SMALL</a>" >> $1.html
-      echo "      &nbsp;$W_MEDIUM&nbsp;" >> $1.html
-      echo "      <a href=\"./$FILENAME.html\">$W_LARGE</a>" >> $1.html
-    elif [ -z "$PREFIX" ]; then
-      echo "      <a href=\"./Sm_$FILENAME.html\">$W_SMALL</a>" >> $1.html
-      echo "      &nbsp;<a href=\"./Med_$FILENAME.html\">$W_MEDIUM</a>&nbsp;" >> $1.html
-      echo "      $W_LARGE" >> $1.html
+    if [ $SCALED -eq 1 ]; then
+      echo "      &nbsp;&nbsp;" >> $1.html
+    elif [ $SCALED -eq 2 ]; then
+      if [ "$PREFIX" = "Sm_" ]; then
+        echo "      $W_SMALL" >> $1.html
+        echo "      <a href=\"./$FILENAME.html\">$W_LARGE</a>" >> $1.html
+      elif [ -z "$PREFIX" ]; then
+        echo "      <a href=\"./Sm_$FILENAME.html\">$W_SMALL</a>" >> $1.html
+        echo "      $W_LARGE" >> $1.html
+      fi
+    elif [ $SCALED -eq 3 ]; then
+      if [ "$PREFIX" = "Sm_" ]; then
+        echo "      $W_SMALL" >> $1.html
+        echo "      &nbsp;<a href=\"./Med_$FILENAME.html\">$W_MEDIUM</a>&nbsp;" >> $1.html
+        echo "      <a href=\"./$FILENAME.html\">$W_LARGE</a>" >> $1.html
+      elif [ "$PREFIX" = "Med_" ]; then
+        echo "      <a href=\"./Sm_$FILENAME.html\">$W_SMALL</a>" >> $1.html
+        echo "      &nbsp;$W_MEDIUM&nbsp;" >> $1.html
+        echo "      <a href=\"./$FILENAME.html\">$W_LARGE</a>" >> $1.html
+      elif [ -z "$PREFIX" ]; then
+        echo "      <a href=\"./Sm_$FILENAME.html\">$W_SMALL</a>" >> $1.html
+        echo "      &nbsp;<a href=\"./Med_$FILENAME.html\">$W_MEDIUM</a>&nbsp;" >> $1.html
+        echo "      $W_LARGE" >> $1.html
+      fi
     fi
 
     echo "     </td>" >> $1.html
@@ -1052,12 +1086,20 @@ html_image_information() {
     html_open "$DIR/data/$FILENAME.details" "$TFILENAME ($W_IMAGEINFO)" "../$ENDPOINT"
   fi
 
-  html_subopen "$DIR/data/$PREFIX$FILENAME.details" "$TFILENAME"
+  html_subopen "$DIR/data/$FILENAME.details" "$TFILENAME"
   html_image_path "$DIR/data/$FILENAME.details"
 
   echo "       <tr>" >> $1.html
   echo "        <td align=\"center\" class=\"table_misc\">" >> $1.html
-  echo "         <a href=\"./Med_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+
+  if [ $SCALED -eq 1 ]; then
+    echo "         <a href=\"./$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  elif [ $SCALED -eq 2 ]; then
+    echo "         <a href=\"./Sm_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  elif [ $SCALED -eq 3 ]; then
+    echo "         <a href=\"./Med_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  fi
+
   echo "        </td>" >> $1.html
   echo "       </tr>" >> $1.html
   echo "      </table>" >> $1.html
@@ -1405,7 +1447,15 @@ html_image_information() {
   echo "      <a href=\"../index$SUFFIX.html\">$W_TP</a>" >> $1.html
   echo "     </td>" >> $1.html
   echo "     <td width=\"50%\" align=\"right\">" >> $1.html
-  echo "      <a href=\"./Med_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+
+  if [ $SCALED -eq 1 ]; then
+    echo "         <a href=\"./$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  elif [ $SCALED -eq 2 ]; then
+    echo "         <a href=\"./Sm_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  elif [ $SCALED -eq 3 ]; then
+    echo "         <a href=\"./Med_$FILENAME.html\">$W_BTTI</a>" >> $1.html
+  fi
+
   echo "     </td>" >> $1.html
   echo "    </tr>" >> $1.html
   echo "   </table>" >> $1.html
@@ -1587,19 +1637,45 @@ html_thumbindex() {
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "          <tr>" >> $DIR/index$SUFFIX.html
     echo "           <td colspan=\"3\" align=\"center\" class=\"table_misc\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/Med_$FILENAME.html\" title=\"$FILENAME\"><img src=\"./data/Tn_$FILENAME\" border=\"1\" alt=\"$FILENAME\"></a>" >> $DIR/index$SUFFIX.html
+
+    if [ $SCALED -eq 1 ]; then
+      echo "            <a href=\"./data/$FILENAME.html\" title=\"$FILENAME\"><img src=\"./data/Tn_$FILENAME\" border=\"1\" alt=\"$FILENAME\"></a>" >> $DIR/index$SUFFIX.html
+    elif [ $SCALED -eq 2 ]; then
+      echo "            <a href=\"./data/Sm_$FILENAME.html\" title=\"$FILENAME\"><img src=\"./data/Tn_$FILENAME\" border=\"1\" alt=\"$FILENAME\"></a>" >> $DIR/index$SUFFIX.html
+    elif [ $SCALED -eq 3 ]; then
+      echo "            <a href=\"./data/Med_$FILENAME.html\" title=\"$FILENAME\"><img src=\"./data/Tn_$FILENAME\" border=\"1\" alt=\"$FILENAME\"></a>" >> $DIR/index$SUFFIX.html
+    fi
+
     echo "           </td>" >> $DIR/index$SUFFIX.html
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "          <tr>" >> $DIR/index$SUFFIX.html
-    echo "           <td align=\"right\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/Sm_$FILENAME.html\" title=\"$W_SMALL\">$W_SM</a>" >> $DIR/index$SUFFIX.html
-    echo "           </td>" >> $DIR/index$SUFFIX.html
-    echo "           <td align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/Med_$FILENAME.html\" title=\"$W_MEDIUM\">$W_MED</a>" >> $DIR/index$SUFFIX.html
-    echo "           </td>" >> $DIR/index$SUFFIX.html
-    echo "           <td align=\"left\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
-    echo "            <a href=\"./data/$FILENAME.html\" title=\"$W_LARGE\">$W_LG</a>" >> $DIR/index$SUFFIX.html
-    echo "           </td>" >> $DIR/index$SUFFIX.html
+
+    if [ $SCALED -eq 1 ]; then
+      echo "           <td align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/$FILENAME.html\" title=\"$W_VIEW\">$W_VIEW</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+    elif [ $SCALED -eq 2 ]; then
+      echo "           <td align=\"right\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/Sm_$FILENAME.html\" title=\"$W_SMALL\">$W_SM</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+      echo "           <td align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            &nbsp;&nbsp;" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+      echo "           <td align=\"left\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/$FILENAME.html\" title=\"$W_LARGE\">$W_LG</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+    elif [ $SCALED -eq 3 ]; then
+      echo "           <td align=\"right\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/Sm_$FILENAME.html\" title=\"$W_SMALL\">$W_SM</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+      echo "           <td align=\"center\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/Med_$FILENAME.html\" title=\"$W_MEDIUM\">$W_MED</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+      echo "           <td align=\"left\" class=\"table_subtitle2\">" >> $DIR/index$SUFFIX.html
+      echo "            <a href=\"./data/$FILENAME.html\" title=\"$W_LARGE\">$W_LG</a>" >> $DIR/index$SUFFIX.html
+      echo "           </td>" >> $DIR/index$SUFFIX.html
+    fi
+
     echo "          </tr>" >> $DIR/index$SUFFIX.html
     echo "         </table>" >> $DIR/index$SUFFIX.html
     echo "        </td>" >> $DIR/index$SUFFIX.html
@@ -1619,16 +1695,23 @@ html_thumbindex() {
       html_validator "$DIR/index$SUFFIX"
       html_close "$DIR/index$SUFFIX"
 
-      for ITEM in `seq 0 2` ; do
-        if [ $ITEM -eq 0 ]; then
-          PREFIX="Sm_"
-          PPREFIX="./Sm_"
-        elif [ $ITEM -eq 1 ]; then
-          PREFIX="Med_"
-          PPREFIX="./Med_"
-        elif [ $ITEM -eq 2 ]; then
+      if [ $SCALED -eq 1 ]; then
+        REC="1"
+      elif [ $SCALED -eq 2 ]; then
+        REC="2"
+      elif [ $SCALED -eq 3 ]; then
+        REC="3"
+      fi
+      for ITEM in `seq 1 $REC` ; do
+        if [ $ITEM -eq 1 ]; then
           PREFIX=""
           PPREFIX="../"
+        elif [ $ITEM -eq 2 ]; then
+          PREFIX="Sm_"
+          PPREFIX="./Sm_"
+        elif [ $ITEM -eq 3 ]; then
+          PREFIX="Med_"
+          PPREFIX="./Med_"
         fi
         html_image "$DIR/data/$PREFIX$FILENAME"
       done
@@ -1653,16 +1736,23 @@ html_thumbindex() {
     else
       NIMAGE="`expr $NIMAGE \+ 1`"
 
-      for ITEM in `seq 0 2` ; do
-        if [ $ITEM -eq 0 ]; then
-          PREFIX="Sm_"
-          PPREFIX="./Sm_"
-        elif [ $ITEM -eq 1 ]; then
-          PREFIX="Med_"
-          PPREFIX="./Med_"
-        elif [ $ITEM -eq 2 ]; then
+      if [ $SCALED -eq 1 ]; then
+        REC="1"
+      elif [ $SCALED -eq 2 ]; then
+        REC="2"
+      elif [ $SCALED -eq 3 ]; then
+        REC="3"
+      fi
+      for ITEM in `seq 1 $REC` ; do
+        if [ $ITEM -eq 1 ]; then
           PREFIX=""
           PPREFIX="../"
+        elif [ $ITEM -eq 2 ]; then
+          PREFIX="Sm_"
+          PPREFIX="./Sm_"
+        elif [ $ITEM -eq 3 ]; then
+          PREFIX="Med_"
+          PPREFIX="./Med_"
         fi
         html_image "$DIR/data/$PREFIX$FILENAME"
       done
