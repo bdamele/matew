@@ -61,6 +61,11 @@ main() {
     cleanup 1
   fi
 
+  find $DPATH -name altstyles > $TEMP/.matew-cleanup-$USER
+  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
+    rm -rf $DIR
+  done
+
   find $DPATH -name data > $TEMP/.matew-cleanup-$USER
   for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
     rm -rf $DIR

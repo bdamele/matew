@@ -6,7 +6,7 @@
 
 # Script details
 SCRIPT_PATH="`pwd`"
-SCRIPT_VERSION="1.6"
+SCRIPT_VERSION="1.8"
 
 # Checking if you have root access
 if [ `id -u` -ne 0 ]; then
@@ -59,8 +59,8 @@ main() {
     rm -rf $RCONF/matew 2>/dev/null
     mkdir -m 755 $RCONF/matew
   fi
-  cp -rf $SCRIPT_PATH/src/languages $RCONF/matew/languages
-  cp -rf $SCRIPT_PATH/src/styles $RCONF/matew/styles
+  cp -rf $SCRIPT_PATH/src/languages $RCONF/matew
+  cp -rf $SCRIPT_PATH/src/styles $RCONF/matew
   chmod 755 $RCONF/matew/*
   chmod 755 $RCONF/matew/languages
   chmod 755 $RCONF/matew/styles
@@ -69,12 +69,12 @@ main() {
   rm -rf $RDOCS/matew-* 2>/dev/null
   mkdir -m 755 $RDOCS/matew-$SCRIPT_VERSION
   for FILE in `ls -1 $SCRIPT_PATH/doc | grep -v "man"` ; do
-    cp -rf $SCRIPT_PATH/doc/$FILE $RDOCS/matew-$SCRIPT_VERSION/$FILE
+    cp -rf $SCRIPT_PATH/doc/$FILE $RDOCS/matew-$SCRIPT_VERSION
   done
 
   # Copying manual page $RMAN
   rm -rf $RMAN/matew.1.gz 2>/dev/null
-  cp -rf $SCRIPT_PATH/doc/man/matew.1.gz $RMAN/matew.1.gz
+  cp -rf $SCRIPT_PATH/doc/man/matew.1.gz $RMAN
 
   echo -e "\n\033[1mMatew files installed successfully!\033[0m\n\
 Run matew-wizard and read instructions.\n"

@@ -32,7 +32,7 @@ AUTHOR_EMAIL="bernardo@inquis.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="`pwd`"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.8-rc2"
+SCRIPT_VERSION="1.8"
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -1007,7 +1007,7 @@ html_image() {
 
     echo "    <tr align=\"center\" valign=\"middle\">" >> $1.html
     echo "     <td colspan=\"3\" class=\"table_misc\">" >> $1.html
-    echo "      <a href=\"$PPREFIX$FILENAME\" title=\"$FILENAME\"><img src=\"$PPREFIX$FILENAME\" border=\"0\" alt=\"$FILENAME\"></a>" >> $1.html
+    echo "      <a href=\"../$FILENAME\" title=\"$FILENAME\"><img src=\"$PPREFIX$FILENAME\" border=\"0\" alt=\"$FILENAME\"></a>" >> $1.html
     echo "     </td>" >> $1.html
     echo "    </tr>" >> $1.html
     echo "    <tr>" >> $1.html
@@ -1955,6 +1955,10 @@ process_html() {
 
     DIR="`echo ${DIR%/}`"
 
+    if [ $VERBOSE -eq 2 ]; then
+      echo -e "         \\033[0;34m>\\033[0m Processing HTML files inside \\033[0;36m$DIR\\033[0m"
+    fi
+
     SUFFIX=""
     if [ ! -z "`cat $TEMP/matew-$USER/.subalbums`" ]; then
       html_subindex
@@ -1990,6 +1994,10 @@ process_html() {
       mv $TEMP/matew-$USER/.dirtree.new $TEMP/matew-$USER/.dirtree
       COUNT="`cat $TEMP/matew-$USER/.dirtree | wc -l | sed s/^\ *//`"
       DIR="`echo ${DIR%/}`"
+
+      if [ $VERBOSE -eq 2 ]; then
+        echo -e "         \\033[0;34m>\\033[0m Processing HTML files inside \\033[0;36m$DIR\\033[0m"
+      fi
 
       html_index
     done

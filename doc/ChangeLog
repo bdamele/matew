@@ -5,14 +5,17 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v1.8 - Released on XX Feb 2004 - XXXX lines
+Matew v1.8 - Released on 28 Feb 2004 - 2125 lines
 -------------------------------------------------
 + Added support for alternate stylesheet
   * Added altstyles() to matew-wizard
+  * Revised matew-cleanup
   * Adapted html_open() and process_sl()
 + Added new styles: brasil, green, orange, violet
++ Added an output message to verbose flag
 + Revised matew-wizard
-+ Fixed an if condition in process_information_files()
+! Fixed an if condition in process_information_files()
+! Small bug fixed in matew and install scripts
 
 Matew v1.7 - Released on 13 Feb 2004 - 2101 lines
 -------------------------------------------------
