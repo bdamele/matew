@@ -5,6 +5,15 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
+Matew v1.7 - Released on X Feb 2004 - XXXX lines
+------------------------------------------------
++ Added support for silent mode
+  * Added +s flag in 'Parse option flags' section
+  * Adapted a lot of matew sections
+  * CSS substitution by default is disabled
+! Fixed expr syntax
+! Fixed .htaccess data processing
+
 Matew v1.6 - Released on 10 Feb 2004 - 1969 lines
 -------------------------------------------------
 + Updated file name

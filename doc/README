@@ -22,16 +22,16 @@ follows:
 
 1. Unpack the source into your home directory:
 
-   # tar xfz matew-1.6.tar.gz
+   # tar xfz matew-1.7.tar.gz
 
    or
 
-   # tar xfj matew-1.6.tar.bz2
+   # tar xfj matew-1.7.tar.bz2
 
 
 2. Run matew-wizard to setup the configuration file:
 
-   # cd ./matew-1.6/src
+   # cd ./matew-1.7/src
    # ./matew-wizard
 
    Note: Read the instruction carefully
@@ -77,7 +77,7 @@ and run the install script:
 
 This will put the script executable files into /usr/bin, language and style
 directories into /etc/matew and documentation files into
-/usr/share/doc/matew-1.6.
+/usr/share/doc/matew-1.7.
 
 Now you can run matew from wherever you want. For further information about
 the usage read the 'Usage' paragraph.
