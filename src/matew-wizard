@@ -19,7 +19,7 @@
 
 # Script details (Do NOT edit this parameters)
 SCRIPT_NAME="Matew-wizard"
-SCRIPT_PATH="`pwd`"
+SCRIPT_PATH=$(pwd)
 
 # Configuration parameters (Do NOT edit these parameters)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -43,7 +43,7 @@ cleanup() {
 
 help() {
   cat << HELP
-Usage: `basename $0` [option]
+Usage: $(basename $0) [option]
 
 $SCRIPT_NAME is a wizard to help you set up matew. Run this
 script with no option and read the instructions.
@@ -66,10 +66,10 @@ start() {
   if [ -z "$ITEM" ]; then
     echo -e "Sorry, that response was not an option."
     start
-  elif [ "`echo $ITEM | cut -c 1`" != "y" -a "`echo $ITEM | cut -c 1`" != "n" ]; then
+  elif [ "$(echo $ITEM | cut -c 1)" != "y" -a "$(echo $ITEM | cut -c 1)" != "n" ]; then
     echo "Sorry, invalid answer."
     start
-  elif [ "`echo $ITEM | cut -c 1`" = "n" ]; then
+  elif [ "$(echo $ITEM | cut -c 1)" = "n" ]; then
     cleanup 0
   fi
 }
@@ -98,13 +98,13 @@ style() {
 The style parameter identifies a CSS style, which is the apparance that you\n\
 want to apply to your album by default.\n\
 Currently, the available CSS styles are:\n
-`ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g'`"
+$(ls -1 $STYLES_DIR | grep '.css$' | sed -e 's/.css//g')"
   fi
   echo -e "\nWhich CSS style do you choose? [default: $STYLE] \c"
   read ITEM
   if [ -z "$ITEM" ]; then
     echo "STYLE=\"$STYLE\"" >> $TEMP/.matew-wizard-$USER
-  elif [ ! -z "`ls -1 $STYLES_DIR | grep "^$ITEM.css"`" ]; then
+  elif [ ! -z "$(ls -1 $STYLES_DIR | grep "^$ITEM.css")" ]; then
     echo "STYLE=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
     echo "Sorry, invalid answer."
@@ -151,7 +151,7 @@ Currently, the supported languages are brazilian portuguese (br), english\n\
   read ITEM
   if [ -z "$ITEM" ]; then
     echo "LANG=\"$LANG\"" >> $TEMP/.matew-wizard-$USER
-  elif [ ! -z "`ls -1 $LANGS_DIR | grep "^$ITEM$"`" ]; then
+  elif [ ! -z "$(ls -1 $LANGS_DIR | grep "^$ITEM$")" ]; then
     echo "LANG=\"$ITEM\"" >> $TEMP/.matew-wizard-$USER
   else
     echo "Sorry, invalid answer."
@@ -228,7 +228,7 @@ Note: This value must be a number within 1 and 5."
   read ITEM
   if [ -z "$ITEM" ]; then
     echo "THUMBS_PL=\"$THUMBS_PL\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 5 ]; then
+  elif [ -z "$(echo $ITEM | grep -E '^[0-9]+$')" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 5 ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
     thumbnails_pl
@@ -249,7 +249,7 @@ Note: This value must be a number within 1 and 20."
   read ITEM
   if [ -z "$ITEM" ]; then
     echo "THUMBS_PC=\"$THUMBS_PC\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
+  elif [ -z "$(echo $ITEM | grep -E '^[0-9]+$')" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 20 ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
     thumbnails_pc
@@ -319,7 +319,7 @@ Possible values are:\n
   read ITEM
   if [ -z "$ITEM" ]; then
     echo "SCALED=\"$SCALED\"" >> $TEMP/.matew-wizard-$USER
-  elif [ -z "`echo $ITEM | grep -E '^[0-9]+$'`" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 3 ]; then
+  elif [ -z "$(echo $ITEM | grep -E '^[0-9]+$')" ] || [ $ITEM -lt 1 ] || [ $ITEM -gt 3 ]; then
     echo "Sorry, invalid answer."
     QUERY="open"
     scaled
@@ -330,8 +330,8 @@ Possible values are:\n
 }
 
 main() {
-  if [ "`ls -1 $RCONF/matew/languages 2>/dev/null | wc -l | sed s/^\ *//`" -lt 4 ] || [ "`ls -1 $RCONF/matew/styles 2>/dev/null | wc -l | sed s/^\ *//`" -lt 6 ]; then
-    SCRIPT_PATH="`echo ${SCRIPT_PATH%/}`"
+  if [ "$(ls -1 $RCONF/matew/languages 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 4 ] || [ "$(ls -1 $RCONF/matew/styles 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 6 ]; then
+    SCRIPT_PATH=$(echo ${SCRIPT_PATH%/})
     LANGS_DIR="$SCRIPT_PATH/languages"
     STYLES_DIR="$SCRIPT_PATH/styles"
   else
@@ -383,7 +383,7 @@ HEADER
   fi
 
   if [ -f $CONFIG_FILE ]; then
-    mv $CONFIG_FILE $HOME/.matew/matewrc-`stat -c=%y $CONFIG_FILE | tr -d ':+=-' | sed -e 's/ //g' | tr '.' ' ' | awk '{print $1}'`
+    mv $CONFIG_FILE $HOME/.matew/matewrc-$(stat -c=%y $CONFIG_FILE | tr -d ':+=-' | sed -e 's/'\ '/''/g' | tr '.' ' ' | awk '{print $1}')
   fi
 
   cp -f $TEMP/.matew-wizard-$USER $CONFIG_FILE
