@@ -32,7 +32,7 @@ AUTHOR_EMAIL="bernardo@linux.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="$(pwd)"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="2.0-rc1"
+SCRIPT_VERSION="2.0-rc2"
 
 # Configuration parameters (Do NOT edit)
 CONFIG_FILE="$HOME/.matew/matewrc"
@@ -41,7 +41,7 @@ TEMP="/tmp"
 
 # Matew functions
 version() {
-  echo -e "$SCRIPT_NAME, version $SCRIPT_VERSION, Feb 2004, $AUTHOR_NAME"
+  echo -e "$SCRIPT_NAME, version $SCRIPT_VERSION, May 2004, $AUTHOR_NAME"
 }
 
 report() {
@@ -114,7 +114,7 @@ cleanup() {
   rm -rf $TEMP/matew-$USER 2>/dev/null
   rm -f $TEMP/.matew* 2>/dev/null
 
-  if [ ! -z "$2" ]; then
+  if [ $1 -eq 130 ]; then
     echo -e "\n\n\033[1mWARNING\\033[0m: It looks like you halted $SCRIPT_NAME before it was done.\n\
          Run it again to completion.\n"
   fi
@@ -1570,7 +1570,7 @@ html_post_thumbindex() {
       if [ $TPAGES -le 0 ]; then
         echo "         &nbsp;" >> $1.html
       else
-        echo "         $(expr $ITEM \+ 1 2>/dev/null) &nbsp;" >> $1.html
+        echo "         $(expr $ITEM \+ 1 2>/dev/null)&nbsp;" >> $1.html
       fi
     elif [ $ITEM -eq 0 ] && [ -f $DIR/index0.html ]; then
       echo "         <a href=\"./index0.html\">$(expr $ITEM \+ 1 2>/dev/null)</a>&nbsp;" >> $1.html
@@ -2050,7 +2050,7 @@ main() {
 }
 
 # Trap INT, KILL, ALRM and TERM signals
-trap 'cleanup 1 2' 2 9 14 15
+trap 'cleanup 130' 2 9 14 15
 
 # Parse option flags
 if [ "$1" = "-v" ]; then

@@ -38,7 +38,7 @@ cleanup() {
 
 help() {
   cat << HELP
-Usage: `basename $0` [option] <directory path to clean>
+Usage: $(basename $0) [option] <directory path to clean>
 
 $SCRIPT_NAME deletes recursively all data created by Matew.
 
@@ -62,35 +62,35 @@ main() {
   fi
 
   find $DPATH -name altstyles > $TEMP/.matew-cleanup-$USER
-  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
+  for DIR in $(cat $TEMP/.matew-cleanup-$USER) ; do
     rm -rf $DIR
   done
 
   find $DPATH -name data > $TEMP/.matew-cleanup-$USER
-  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
+  for DIR in $(cat $TEMP/.matew-cleanup-$USER) ; do
     rm -rf $DIR
   done
 
   find $DPATH -name *description* > $TEMP/.matew-cleanup-$USER
-  for FILE in `cat $TEMP/.matew-cleanup-$USER` ; do
+  for FILE in $(cat $TEMP/.matew-cleanup-$USER) ; do
     rm -rf $FILE 2>/dev/null
   done
 
   find $DPATH -name *.css > $TEMP/.matew-cleanup-$USER
-  for CSS in `cat $TEMP/.matew-cleanup-$USER` ; do
+  for CSS in $(cat $TEMP/.matew-cleanup-$USER) ; do
     rm -rf $CSS 2>/dev/null
   done
 
   find $DPATH -name index*.html > $TEMP/.matew-cleanup-$USER
   cat $TEMP/.matew-cleanup-$USER | grep -v "BACKUP" > $TEMP/.matew-cleanup-$USER
-  for HTML in `cat $TEMP/.matew-cleanup-$USER` ; do
+  for HTML in $(cat $TEMP/.matew-cleanup-$USER) ; do
     rm -rf $HTML 2>/dev/null
   done
 
   find $DPATH -name BACKUP > $TEMP/.matew-cleanup-$USER
-  for DIR in `cat $TEMP/.matew-cleanup-$USER` ; do
-    DIR="`echo ${DIR%/}`"
-    PDIR="`echo $DIR | sed -n 's/\([^/]*.*[/$]\).*/\1/p'`"
+  for DIR in $(cat $TEMP/.matew-cleanup-$USER) ; do
+    DIR="$(echo ${DIR%/})"
+    PDIR="$(echo $DIR | sed -n 's/\([^/]*.*[/$]\).*/\1/p')"
     mv -f $DIR/* $PDIR 2>/dev/null
     rm -rf $DIR 2>/dev/null
   done

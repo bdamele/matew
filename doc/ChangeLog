@@ -5,11 +5,13 @@ Matew - Make Album The Easy Way
 ChangeLog
 ---------
 
-Matew v2.0 - Released on XX Apr 2004 - XXXX lines
+Matew v2.0 - Released on XX May 2004 - XXXX lines
 -------------------------------------------------
-! Fixed RCONF value
-! Fixed some comments
+! Fixed matew-cleanup syntax
 ! Fixed the first if condition in matew-wizard main() function
+! Fixed cleanup() function check
+! Fixed RCONF value
+! Other small bug fixed in matew
 
 Matew v1.9 - Released on 6 Apr 2004 - 2107 lines
 ------------------------------------------------
