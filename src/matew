@@ -26,17 +26,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GOPYING file for more details.
 
-# Script details (Do NOT edit these details)
+# Script details (Do NOT edit)
 AUTHOR_NAME="Bernardo 'inquis' Damele"
 AUTHOR_EMAIL="bernardo@linux.it"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="$(pwd)"
 SCRIPT_URL="http://matew.sourceforge.net"
-SCRIPT_VERSION="1.9"
+SCRIPT_VERSION="2.0-rc1"
 
-# Configuration parameters (Do NOT edit these parameters)
+# Configuration parameters (Do NOT edit)
 CONFIG_FILE="$HOME/.matew/matewrc"
-RCONF="/etc"
+RCONF="/usr/share"
 TEMP="/tmp"
 
 # Matew functions
@@ -115,7 +115,7 @@ cleanup() {
   rm -f $TEMP/.matew* 2>/dev/null
 
   if [ ! -z "$2" ]; then
-    echo -e "\n\n\033[1mWARNING\\033[0m: It looks like you halted matew before it was done.\n\
+    echo -e "\n\n\033[1mWARNING\\033[0m: It looks like you halted $SCRIPT_NAME before it was done.\n\
          Run it again to completion.\n"
   fi
 
@@ -123,7 +123,7 @@ cleanup() {
 }
 
 error() {
-  echo -e "\\033[0;31mERROR\\033[0m: Matew depends on both \\033[0;36mconvert\\033[0m and \\033[0;36midentify\\033[0m,\n\
+  echo -e "\\033[0;31mERROR\\033[0m: $SCRIPT_NAME depends on both \\033[0;36mconvert\\033[0m and \\033[0;36midentify\\033[0m,\n\
        two command line tools. Install the ImageMagick package."
   cleanup 1
 }
@@ -1858,12 +1858,12 @@ html_index() {
 
 process_sl() {
   if [ "$(ls -1 $RCONF/matew/languages 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 4 ] || [ "$(ls -1 $RCONF/matew/styles 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 6 ]; then
-    SCRIPT_PATH=$(echo ${SCRIPT_PATH%/})
+    SCRIPT_PATH="$(echo ${SCRIPT_PATH%/})"
     LANGS_DIR="$SCRIPT_PATH/languages"
     STYLES_DIR="$SCRIPT_PATH/styles"
   else
-    LANGS_DIR="/etc/matew/languages"
-    STYLES_DIR="/etc/matew/styles"
+    LANGS_DIR="$RCONF/matew/languages"
+    STYLES_DIR="$RCONF/matew/styles"
   fi
 
   if [ -f "$DPATH/style.css" ]; then

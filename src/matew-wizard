@@ -17,20 +17,20 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GOPYING file for more details.
 
-# Script details (Do NOT edit this parameters)
+# Script details (Do NOT edit)
 SCRIPT_NAME="Matew-wizard"
 SCRIPT_PATH="$(pwd)"
 
-# Configuration parameters (Do NOT edit these parameters)
+# Configuration parameters (Do NOT edit)
 CONFIG_FILE="$HOME/.matew/matewrc"
-RCONF="/etc"
+RCONF="/usr/share"
 TEMP="/tmp"
 
 # Matew-wizard functions
 cleanup() {
   rm -rf $TEMP/.matew-wizard-$USER 2>/dev/null
 
-  if [ -z "$2" ]; then
+  if [ $1 -eq 0 ]; then
     echo
   else
     echo -e "\n\n\033[1mWARNING\\033[0m: It looks like you cancelled out of the wizard before it was done. \n\
@@ -330,13 +330,13 @@ Possible values are:\n
 }
 
 main() {
-  if [ "$(ls -1 $RCONF/matew/languages 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 4 ] || [ "$(ls -1 $RCONF/matew/styles 2>/dev/null | wc -l | sed s/'^\ *'/''/)" -lt 6 ]; then
-    SCRIPT_PATH=$(echo ${SCRIPT_PATH%/})
+  if [ "$(ls -1 $RCONF/matew/languages 2>/dev/null | grep -v README | wc -l | sed s/'^\ *'/''/)" -lt 4 ] || [ "$(ls -1 $RCONF/matew/styles 2>/dev/null | grep -v README | wc -l | sed s/'^\ *'/''/)" -lt 6 ]; then
+    SCRIPT_PATH="$(echo ${SCRIPT_PATH%/})"
     LANGS_DIR="$SCRIPT_PATH/languages"
     STYLES_DIR="$SCRIPT_PATH/styles"
   else
-    LANGS_DIR="/etc/matew/languages"
-    STYLES_DIR="/etc/matew/styles"
+    LANGS_DIR="$RCONF/matew/languages"
+    STYLES_DIR="$RCONF/matew/styles"
   fi
 
   # Set the defaults for all variables
@@ -395,7 +395,7 @@ You can now run matew."
 }
 
 # Trap INT, KILL, ALRM and TERM signals
-trap 'cleanup 1 2' 2 9 14 15
+trap 'cleanup 1' 2 9 14 15
 
 # Parse option flags
 if [ ! -z "$1" ]; then
