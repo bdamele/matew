@@ -88,27 +88,3 @@ Required package
 
 ImageMagick <http://www.imagemagick.org> for convert and identify command
 line tools.
-
-
-License
--------
-
-GNU GENERAL PUBLIC LICENSE, see COPYING for details.
-
-
-Disclaimer
-----------
-
-There is no warranty, expressed or implied, associated with this tool.
-Use at your own risk. Do not blame the author.
-
-
-Contacts
---------
-
-Feel free to contact me for comments, suggestions, bug reports or patches:
-
-Homepage:   http://matew.sourceforge.net
-E-Mail:     inquis (at) ondaquadra <dot> org
-Icq UIN:    168841601
-Jabber ID:  inquis@jabber.linux.it
