@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Name: Matew - Make Album The Easy Way
-# Author: Bernardo Damele <bernardo.damele@gmail.com>
+# Author: Bernardo Damele A. G. <bernardo.damele@gmail.com>
 #
 # Matew is a valid HTML/CSS generator for static image albums. It supports
 # retrieving information from EXIF cameras and includes customizable options
@@ -27,7 +27,7 @@
 # GOPYING file for more details.
 
 # Script details (Do NOT edit)
-AUTHOR_NAME="Bernardo Damele"
+AUTHOR_NAME="Bernardo Damele A. G."
 AUTHOR_EMAIL="bernardo.damele@gmail.com"
 SCRIPT_NAME="Matew"
 SCRIPT_PATH="$(pwd)"
