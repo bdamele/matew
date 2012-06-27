@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>matew by inquisb</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>matew</h1>
+        <p>Make Album The Easy Way</p>
+
+        <p class="view"><a href="https://github.com/inquisb/matew">View the Project on GitHub <small>inquisb/matew</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/inquisb/matew/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/inquisb/matew/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/inquisb/matew">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Matew - Make Album The Easy Way</h1>
+
+<p>Matew is a valid HTML/CSS generator for static image albums. It supports retrieving information from EXIF cameras and includes customizable options like character set encoding. Albums may contain sub albums, and the appearance of an album can be fully personalized and customized choosing a CSS style file, setting names and descriptions of albums and individual images.</p>
+
+<h2>Features</h2>
+
+<ul>
+<li>Albums can contain sub albums: The album can have a tree structure.</li>
+<li>Automatical generation of a thumbnail and of scaled images for each image.</li>
+<li>EXIF information: Use of EXIF data structure found on some image files (usually, those produced by digital cameras and image's softwares manipulation) to fill automatically some fields (camera model, date and time for example).</li>
+<li>Easy to use matew-wizard script to set the configuration file. Some of the fields it handles are:
+
+<ul>
+<li>Character encoding for HTML generation, including UTF-8 (Unicode) support by default.</li>
+<li>Generated album appearance is customizable by choosing a default CSS style files or editing your own one.</li>
+<li>Internationalization (generation of album in different languages) by choosing a language file. Current supported languages are english, brazilian portuguese, italian, sweden and croatian.</li>
+<li>Support for a standard link to an external file.</li>
+<li>Thumbnails per page: You can choose how many thumbnails per column and per line the album will visualize.</li>
+</ul>
+</li>
+<li>Three description fields (name, description and image identifier) can be associated with each album (in text or HTML format). You can easily customize these fields.</li>
+</ul><h2>Usage</h2>
+
+<p>I advice you to login as root and install the script. By the way if you just want to try the script before installing it onto the system do as follows:</p>
+
+<ol>
+<li>Unpack the source into your home directory:
+<code>
+# tar xfz matew.tar.gz
+</code>
+or
+<code>
+# unzip matew.zip
+</code>
+</li>
+<li>Run <code>matew-wizard</code> to setup the configuration file:
+<code>
+# cd ./matew/src
+# ./matew-wizard
+</code>
+Note: Read the instruction carefully</li>
+<li>Finally run matew:
+<code>
+# ./matew &lt;source path&gt; &lt;target path&gt;
+</code>
+Note: <code>&lt;source path&gt;</code> is the directory where the images are stored in. <code>&lt;target path&gt;</code> is the directory where you want the album to be created. This path can be the same as the source path.
+It's strongly reccomanded to run matew with the verbose flag at least the first time you run it:
+<code>
+# ./matew -v &lt;source path&gt; &lt;target path&gt;
+</code>
+This way you can see exactly what the script is doing every time.</li>
+<li>Read the matew help usage for more details:
+<code>
+# ./matew -h
+</code>
+Note: The <code>-i</code> flag can be used to create the information files (album_description and image_descriptions). It is really useful the first you run matew on a certain <code>&lt;source path&gt;</code>. Then you can edit these files to setup album name, album description, album image identifier and a long description for one or more images. Later run matew without the -i flag. You will notice that now there are more information in the album output pages.</li>
+</ol><h2>Installation</h2>
+
+<p>To install the script login as root then, enter the unpacked matew directory and run the install script:</p>
+
+<pre><code>cd ./matew
+./install
+</code></pre>
+
+<p>This will put the script executable files into <code>/usr/bin</code>, language and style directories into <code>/etc/matew</code> and documentation files into <code>/usr/share/doc/matew</code>.</p>
+
+<p>Now you can run matew from wherever you want. For further information about the usage read the [[Usage]] paragraph.</p>
+
+<h2>Dependencies</h2>
+
+<p><a href="http://www.imagemagick.org">ImageMagick</a> for convert and identify command line tools.</p>
+
+<h2>License</h2>
+
+<p>matew is released under the terms of the <a href="http://www.gnu.org/licenses/gpl-2.0.html">General Public License v2</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/inquisb">inquisb</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-5077325-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
