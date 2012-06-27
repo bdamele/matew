@@ -52,9 +52,10 @@ Note: The `-i` flag can be used to create the information files (album_descripti
 ## Installation
 
 To install the script login as root then, enter the unpacked matew directory and run the install script:
-
-# cd ./matew
-# ./install
+```
+cd ./matew
+./install
+```
 
 This will put the script executable files into `/usr/bin`, language and style directories into `/etc/matew` and documentation files into `/usr/share/doc/matew`.
 
