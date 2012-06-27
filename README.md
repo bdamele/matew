@@ -8,11 +8,11 @@ Matew is a valid HTML/CSS generator for static image albums. It supports retriev
 * Automatical generation of a thumbnail and of scaled images for each image.
 * EXIF information: Use of EXIF data structure found on some image files (usually, those produced by digital cameras and image's softwares manipulation) to fill automatically some fields (camera model, date and time for example).
 * Easy to use matew-wizard script to set the configuration file. Some of the fields it handles are:
-** Character encoding for HTML generation, including UTF-8 (Unicode) support by default.
-** Generated album appearance is customizable by choosing a default CSS style files or editing your own one.
-** Internationalization (generation of album in different languages) by choosing a language file. Current supported languages are english, brazilian portuguese, italian, sweden and croatian.
-** Support for a standard link to an external file.
-** Thumbnails per page: You can choose how many thumbnails per column and per line the album will visualize.
+ * Character encoding for HTML generation, including UTF-8 (Unicode) support by default.
+ * Generated album appearance is customizable by choosing a default CSS style files or editing your own one.
+ * Internationalization (generation of album in different languages) by choosing a language file. Current supported languages are english, brazilian portuguese, italian, sweden and croatian.
+ * Support for a standard link to an external file.
+ * Thumbnails per page: You can choose how many thumbnails per column and per line the album will visualize.
 * Three description fields (name, description and image identifier) can be associated with each album (in text or HTML format). You can easily customize these fields.
 
 ## Usage
